@@ -1,0 +1,11 @@
+Let>k=0 
+Repeat>k
+	IfWindowOpen>Администратор: C:\Windows\System32\cmd.exe*
+		CloseWindow>Администратор: C:\Windows\System32\cmd.exe*
+	Else
+		Let>k=1
+	Endif 
+Until>k=1
+
+
+
