@@ -1,0 +1,117 @@
+IfWindowOpen>TeamViewer*
+	SetFocus>TeamViewer*
+	//Message> TeamViewer opened
+	Label>WaitLogon
+	//FindWindowWithText>Введите, 1,windowname
+	IfWindowOpen>Идентификация TeamViewer
+		SetFocus>Идентификация TeamViewer
+		PlayWav>notify.wav
+		//Message> Found
+		Send>sergvcx162
+		Press Enter
+	//Length>windowname,Len
+
+	//If>{%windowname% = "NOT FOUND"}
+		//Wait>0.5
+		//PlayWav>click.wav
+		//goto>WaitLogon
+	Else 
+		//Message>windowname
+		//PlayWav>notify.wav
+		Wait>0.5
+		PlayWav>click.wav
+		goto>WaitLogon
+	Endif
+Else
+	Run Program>C:\Program Files (x86)\TeamViewer\TeamViewer.exe -i 703669353 --Password sergvcx162
+	
+Endif
+
+WaitWindowOpen>sergvcx - TeamViewer*
+SetFocus>sergvcx - TeamViewer*
+WaitWindowOpen>sergvcx - TeamViewer*
+PlayWav>notify.wav
+Wait>1
+
+Label>FindButtom
+GetScreenRes>X,Y
+ScreenCapture>0,0,X,Y,screen.bmp
+FindImagePos>team-view.bmp,screen.bmp,0,1,X,Y,NumFound
+If>NumFound>0
+	MouseMove>X_0,Y_0
+	Wait>0.5
+	MouseMove>X_0,Y_0
+	LClick
+	Wait>0.1
+	PlayWav>click.wav
+	Wait>0.2
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Wait>0.2
+	Press Enter
+	Wait>0.2
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Press Down
+	Wait>0.2
+	Press Enter
+else 
+	goto>FindButtom
+Endif
+
+
+Wait>0.5
+FindImagePos>team-hide.bmp,screen.bmp,0,1,X,Y,NumFound
+If>NumFound>0
+	MouseMove>X_0,Y_0
+	Wait>0.5
+	MouseMove>X_0,Y_0
+	LClick
+	PlayWav>click.wav
+Endif
+
+Wait>0.5
+FindImagePos>team-full.bmp,screen.bmp,0,1,X,Y,NumFound
+If>NumFound>0
+Sub>Y_0,40
+MouseMove>X_0,Y_0
+Wait>0.5
+MouseMove>X_0,Y_0
+LClick
+PlayWav>click.wav
+Endif
+
+//Label>HideRemoteShit
+//Wait>1
+//GetScreenRes>X,Y
+//ScreenCapture>0,0,X,Y,screen.bmp
+//FindImagePos>team-hide-remote.bmp,screen.bmp,0,1,X,Y,NumFound
+//If>NumFound=0
+//goto>HideRemoteShit
+//Endif
+//MouseMove>X_0,Y_0
+//Wait>0.5
+//MouseMove>X_0,Y_0
+//LClick
+
+Wait>1
+MouseMove>1099,645
+Wait>0.5
+MouseMove>1099,645
+LClick
+PlayWav>click.wav
+
+
+
+

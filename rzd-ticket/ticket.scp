@@ -1,0 +1,46 @@
+
+Label>WaitTicket
+Let>window_title=Расписание, стоимость билетов*
+// | Пассажирам - Mozilla Firefox
+SetFocus>window_title
+//GetControlText>window_title,ClassName,Instance,Result
+//wait>1
+//Расписание, стоимость билетов | Пассажирам - Mozilla Firefox
+//788392 - MozillaWindowClass "Расписание, стоимость билетов | Пассажирам - Mozilla Firefox"
+Press F5
+Wait>20
+
+Press CTRL
+Send>a
+Release CTRL
+
+Wait>0.5
+
+Press CTRL
+Send>c
+Release CTRL
+//PlayWav>click.wav
+
+
+GetClipBoard>RzdClip
+DeleteFile>clip.txt
+WriteLn>clip.txt,result,RzdClip
+
+Position>МОСКВА - БЕРЕЩИНО,RzdClip,1,result
+If>result=0
+	goto>WaitTicket
+Endif
+
+Position>Не найдено ни одного поезда прямого сообщения,RzdClip,1,result
+If>result>1
+	goto>WaitTicket
+Endif
+
+Run>mpg123 sound.mp3
+Wait>3
+MessageModal>Есть билеты!!!
+
+
+
+
+
