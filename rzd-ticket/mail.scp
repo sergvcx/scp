@@ -2,7 +2,7 @@
 //Message>msg
 Let>SMTP_AUTH=1
 Let>SMTP_USERID=mushkaev@gmail.com
-Let>SMTP_PASSWORD=sergvcx162
+Let>SMTP_PASSWORD=xxxx
 //SMTPSendMail>recipients,   server,      from_address,    from_name, subject,body,attachments
 SMTPSendMail>sergvcx@mail.ru,smtp.gmail.com,mushkaev@gmail.com,rzd_scanner,Tickets,Message,url30.txt
 MessageModal> %SMTP_RESULT%
