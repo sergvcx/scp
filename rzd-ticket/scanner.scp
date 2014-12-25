@@ -1,0 +1,82 @@
+﻿
+
+Label>WaitTicket
+
+//-----------------------------------------------------------
+Run>getpage.bat url30.txt
+Wait>5
+Run>utf2win.bat
+Wait>0.5
+ReadFile>winpage.txt,page
+Position>мест нет,page,1,result
+
+If>result=0
+	Run>mpg123 sound.mp3
+	Wait>3
+	Let>msg=Есть билеты на 30 !!!
+	Let>att=url30.txt
+	Goto>EMail
+Endif
+//------------------------------------------------------
+Run>getpage.bat url29.txt
+Wait>5
+Run>utf2win.bat
+Wait>0.5
+ReadFile>winpage.txt,page
+Position>мест нет,page,1,result
+
+If>result=0
+	Run>mpg123 sound.mp3
+	Wait>3
+	
+	Let>msg=Есть билеты на 29 !!!
+	Let>att=url29.txt
+	Goto>EMail
+Endif
+//----------------------------------------------------------
+Run>getpage.bat url28.txt
+Wait>5
+Run>utf2win.bat
+Wait>0.5
+ReadFile>winpage.txt,page
+Position>мест нет,page,1,result
+
+If>result=0
+	Run>mpg123 sound.mp3
+	Wait>3
+	Let>msg=Есть билеты на 28 !!!
+	Let>att=url28.txt
+	Goto>EMail
+Endif
+//----------------------------------------------------------
+Run>getpage.bat url27.txt
+Wait>5
+Run>utf2win.bat
+Wait>0.5
+ReadFile>winpage.txt,page
+Position>мест нет,page,1,result
+
+If>result=0
+	Run>mpg123 sound.mp3
+	Wait>3
+	Let>msg=Есть билеты на 27 !!!
+	Let>att=url27.txt
+	Goto>EMail
+Endif
+//----------------------------------------------------------
+
+Wait>5
+//PlayWav>click.wav
+goto>WaitTicket
+
+Label>EMail
+Let>SMTP_AUTH=1
+Let>SMTP_USERID=5330272
+Let>SMTP_PASSWORD=sergvcx4
+//SMTPSendMail>recipients,   server,      from_address,    from_name, subject,body,attachments
+SMTPSendMail>sergvcx@mail.ru,smtp.mail.ru,5330272@mail.ru,rzd_scanner,Tickets,%msg%,%att%
+
+
+
+
+
