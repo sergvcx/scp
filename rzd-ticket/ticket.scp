@@ -19,7 +19,7 @@ Wait>0.5
 Press CTRL
 Send>c
 Release CTRL
-//PlayWav>click.wav
+PlayWav>click.wav
 
 
 GetClipBoard>RzdClip
@@ -38,9 +38,18 @@ Endif
 
 Run>mpg123 sound.mp3
 Wait>3
+
+
+
+Let>Message=Есть билеты!!!
+Let>SMTP_AUTH=1
+Let>SMTP_USERID=info@hotel360.ru
+Let>SMTP_PASSWORD=info
+//SMTPSendMail>recipients,   server,      from_address,    from_name, subject,body,attachments
+SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,Tickets,Message
+//MessageModal> %SMTP_RESULT%
+
+
 MessageModal>Есть билеты!!!
-
-
-
 
 
