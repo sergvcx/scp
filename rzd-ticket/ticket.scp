@@ -1,14 +1,16 @@
+Let>Period=20
+Let>SK_DELAY=15
+Let>window_title=Расписание, стоимость билетов*
 
 Label>WaitTicket
-Let>window_title=Расписание, стоимость билетов*
-// | Пассажирам - Mozilla Firefox
+DeleteFile>clip.txt
+
 SetFocus>window_title
-//GetControlText>window_title,ClassName,Instance,Result
-//wait>1
-//Расписание, стоимость билетов | Пассажирам - Mozilla Firefox
-//788392 - MozillaWindowClass "Расписание, стоимость билетов | Пассажирам - Mozilla Firefox"
+Wait>2
+SetFocus>window_title
 Press F5
-Wait>20
+Wait>8
+
 
 Press CTRL
 Send>a
@@ -23,33 +25,40 @@ PlayWav>click.wav
 
 
 GetClipBoard>RzdClip
-DeleteFile>clip.txt
 WriteLn>clip.txt,result,RzdClip
 
 Position>МОСКВА - БЕРЕЩИНО,RzdClip,1,result
 If>result=0
-	goto>WaitTicket
+	Message>Connection Error
+	Label>Error
+	PlayWav>click.wav
+	Goto>Error
 Endif
 
 Position>Не найдено ни одного поезда прямого сообщения,RzdClip,1,result
 If>result>1
+	Wait>Period
 	goto>WaitTicket
 Endif
 
-Run>mpg123 sound.mp3
-Wait>3
 
-
-
-Let>Message=Есть билеты!!!
+//--------------------------------------------
+Let>window_title=Mail.Ru Агент (1 вкладка)*
+SetFocus>window_title
+Wait>2
+SetFocus>window_title
+Send>Tickets!!!
+Press CTRL
+Press Enter
+Release CTRL
+//--------------------------------------------
+Let>Message=Есть билеты. Шлю на почту!!!
 Let>SMTP_AUTH=1
 Let>SMTP_USERID=info@hotel360.ru
 Let>SMTP_PASSWORD=info
-//SMTPSendMail>recipients,   server,      from_address,    from_name, subject,body,attachments
 SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,Tickets,Message
 //MessageModal> %SMTP_RESULT%
-
-
-MessageModal>Есть билеты!!!
-
+//MessageModal>Отправка окончена!!!
+//-------------------------------------------
+Run>mpg123 sound.mp3
 
