@@ -42,6 +42,11 @@ If>result>1
 	goto>WaitTicket
 Endif
 
+Position>Идет процесс обработки данных,RzdClip,1,result
+If>result>1
+	Wait>Period
+	goto>WaitTicket
+Endif
 
 //--------------------------------------------
 Let>window_title=Mail.Ru Агент (1 вкладка)*
