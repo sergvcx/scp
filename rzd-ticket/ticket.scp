@@ -1,4 +1,4 @@
-Let>Period=20
+Let>Period=40
 Let>SK_DELAY=15
 Let>window_title=Ðàñïèñàíèå, ñòîèìîñòü áèëåòîâ*
 
@@ -26,12 +26,13 @@ PlayWav>click.wav
 
 GetClipBoard>RzdClip
 WriteLn>clip.txt,result,RzdClip
-
-Position>ÌÎÑÊÂÀ - ÁÅÐÅÙÈÍÎ,RzdClip,1,result
+Message>RzdClip
+Position>ÁÅÐÅÙÈÍÎ - ÌÎÑÊÂÀ,RzdClip,1,result
 If>result=0
-	Message>Connection Error
+	Message>RzdClip
 	Label>Error
 	PlayWav>click.wav
+	Wait>1
 	Goto>Error
 Endif
 
