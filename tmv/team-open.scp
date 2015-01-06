@@ -27,11 +27,14 @@ Else
 	
 Endif
 
-WaitWindowOpen>sergvcx - TeamViewer*
-SetFocus>sergvcx - TeamViewer*
-WaitWindowOpen>sergvcx - TeamViewer*
+//Let>Remote=sergvcx - TeamViewer*
+Let>Remote=IDIMM*
+WaitWindowOpen>Remote
+SetFocus>Remote
+WaitWindowOpen>Remote
 PlayWav>notify.wav
 Wait>1
+
 
 Label>FindButtom
 GetScreenRes>X,Y
