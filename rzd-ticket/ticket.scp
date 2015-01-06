@@ -1,55 +1,114 @@
+
+	
 Let>Period=40
+Let>Refresh=5
 Let>SK_DELAY=15
 Let>window_title=Расписание, стоимость билетов*
+WaitWindowOpen>window_title
+Message>Сканирование начато...
+Wait>1
 
 Label>WaitTicket
-DeleteFile>clip.txt
+Let>Faults=0
+
 
 SetFocus>window_title
-Wait>2
+Message>Обновляем...
+Wait>1
 SetFocus>window_title
+PlayWav>click.wav
 Press F5
-Wait>8
 
+Label>TrySnapShot
+Message>Focusing ...
+Wait>1
+WaitWindowOpen>window_title
+Message>Focused! Snapshoting...
+Wait>1
+SetFocus>window_title
+Wait>Refresh
 
+//-------------------- snap shot------------
 Press CTRL
 Send>a
 Release CTRL
-
-Wait>0.5
-
+Wait>2
 Press CTRL
 Send>c
 Release CTRL
 PlayWav>click.wav
+Wait>1
+//-------------------------------------------
 
-
+DeleteFile>clip.txt
 GetClipBoard>RzdClip
 WriteLn>clip.txt,result,RzdClip
-Message>RzdClip
+//Message>RzdClip
 Position>БЕРЕЩИНО - МОСКВА,RzdClip,1,result
 If>result=0
+	Message>не найдено:БЕРЕЩИНО - МОСКВА. Еще разок...
+	wait>1
 	Message>RzdClip
-	Label>Error
-	PlayWav>click.wav
-	Wait>1
-	Goto>Error
-Endif
-
-Position>Не найдено ни одного поезда прямого сообщения,RzdClip,1,result
-If>result>1
-	Wait>Period
-	goto>WaitTicket
+	wait>1
+	PlayWav>notify.wav
+	Goto>TrySnapShot
 Endif
 
 Position>Идет процесс обработки данных,RzdClip,1,result
 If>result>1
+	Message>Идет процесс обработки данных. Еще разок...
+	wait>1
+	PlayWav>notify.wav
+	Wait>Period
+	goto>TrySnapShot
+Endif
+
+Position>Сервер не отвечает. Попробуйте обновить страницу,RzdClip,1,result
+If>result>1
+	Message>Сервер не отвечает! Обновляем...
+	wait>1
+	PlayWav>notify.wav
 	Wait>Period
 	goto>WaitTicket
 Endif
 
+
+Position>Не найдено ни одного поезда прямого сообщения,RzdClip,1,result
+If>result>1
+	Message>Грят что никуя не найдено! Обновляем...
+	wait>1
+	PlayWav>tick.wav
+	Wait>Period
+	goto>WaitTicket
+Endif
+
+//Position>Плацкартный  Купе,RzdClip,1,fromPos
+//If>fromPos>1
+//	Message>Плацкартный  Купе! 
+//	wait>1
+//	Message>fromPos
+//	wait>1
+//endif
+ 
+Position>Плацкартный	,RzdClip,1,result
+If>result>1
+	Message>Ура! Есть плацкартный! 
+else 
+	Message>Есть  билеты, но нет плацкарты - Накуй! Обновляем...
+	wait>1
+	PlayWav>tick.wav
+	Wait>Period
+	goto>WaitTicket
+	
+Endif
+
+
+Run>mpg123 sound.mp3
+Wait>1
+Let>Message=О!! Есть билеты. 
 //--------------------------------------------
-Let>window_title=Mail.Ru Агент (1 вкладка)*
+
+Let>window_title=Mail.Ru Агент*
 SetFocus>window_title
 Wait>2
 SetFocus>window_title
@@ -57,6 +116,7 @@ Send>Tickets!!!
 Press CTRL
 Press Enter
 Release CTRL
+
 //--------------------------------------------
 Let>Message=Есть билеты. Шлю на почту!!!
 Let>SMTP_AUTH=1
@@ -66,5 +126,5 @@ SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,Tickets,Me
 //MessageModal> %SMTP_RESULT%
 //MessageModal>Отправка окончена!!!
 //-------------------------------------------
-Run>mpg123 sound.mp3
+
 
