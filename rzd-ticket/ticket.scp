@@ -1,17 +1,22 @@
 
 	
 Let>Period=40
-Let>Refresh=5
+Let>RefreshTime=5
 Let>SK_DELAY=15
 Let>window_title=Расписание, стоимость билетов*
 WaitWindowOpen>window_title
 Message>Сканирование начато...
 Wait>1
 
+//------------------  refresh --------------------
 Label>WaitTicket
 Let>Faults=0
-
-
+Let>WW_TIMEOUT=30
+WaitWindowOpen>window_title
+If>WW_RESULT=FALSE	
+	Message>WTH c окошком
+	Goto>NoWindow
+Endif
 SetFocus>window_title
 Message>Обновляем...
 Wait>1
@@ -19,16 +24,21 @@ SetFocus>window_title
 PlayWav>click.wav
 Press F5
 
+//-------------------- snap shot------------
 Label>TrySnapShot
-Message>Focusing ...
-Wait>1
+Message>Waiting refresh...
 WaitWindowOpen>window_title
-Message>Focused! Snapshoting...
+If>WW_RESULT=FALSE	
+	Message>WTH c окошком
+	Goto>WaitTicket
+Endif
+Wait>RefreshTime
+
+Message>Snapshoting...
 Wait>1
 SetFocus>window_title
-Wait>Refresh
+Wait>1
 
-//-------------------- snap shot------------
 Press CTRL
 Send>a
 Release CTRL
@@ -59,7 +69,6 @@ If>result>1
 	Message>Идет процесс обработки данных. Еще разок...
 	wait>1
 	PlayWav>notify.wav
-	Wait>Period
 	goto>TrySnapShot
 Endif
 
@@ -92,39 +101,54 @@ Endif
  
 Position>Плацкартный	,RzdClip,1,result
 If>result>1
-	Message>Ура! Есть плацкартный! 
+	Message>Есть плацкартный!
+	Wait>1	
 else 
 	Message>Есть  билеты, но нет плацкарты - Накуй! Обновляем...
 	wait>1
 	PlayWav>tick.wav
 	Wait>Period
 	goto>WaitTicket
-	
 Endif
 
 
 Run>mpg123 sound.mp3
-Wait>1
-Let>Message=О!! Есть билеты. 
+wait>1
+Message>Ура! Есть плацкартный!
+Wait>1	
 //--------------------------------------------
 
-Let>window_title=Mail.Ru Агент*
-SetFocus>window_title
-Wait>2
-SetFocus>window_title
-Send>Tickets!!!
-Press CTRL
-Press Enter
-Release CTRL
+Let>mail_window_title=Mail.Ru Агент*
+IfWindowOpen>mail_window_title
+	SetFocus>mail_window_title
+	Wait>2
+	SetFocus>mail_window_title
+	Send>Tickets!!!
+	Press CTRL
+	Press Enter
+	Release CTRL
+Else 
+	Message>Агент не найдено
+	Wait>1
+Endif
+
 
 //--------------------------------------------
-Let>Message=Есть билеты. Шлю на почту!!!
+Let>Msg=Есть билеты. Шлю на почту!!!
+Message>Msg
 Let>SMTP_AUTH=1
 Let>SMTP_USERID=info@hotel360.ru
 Let>SMTP_PASSWORD=info
-SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,Tickets,Message
+SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,Tickets,Msg
 //MessageModal> %SMTP_RESULT%
-//MessageModal>Отправка окончена!!!
+MessageModal>Отправка окончена!!!
+Exit>
 //-------------------------------------------
+Label>NoWindow
+Let>Msg= Сканер встал!!!
+Let>SMTP_AUTH=1
+Let>SMTP_USERID=info@hotel360.ru
+Let>SMTP_PASSWORD=info
+SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,Tickets,Msg
 
 
