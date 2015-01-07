@@ -31,12 +31,6 @@ Wait>1
 
 //-------------------- snap shot------------
 Label>TrySnapShot
-Message>Waiting refresh...
-WaitWindowOpen>window_title
-If>WW_RESULT=FALSE	
-	Message>WTH c окошком
-	Goto>WaitTicket
-Endif
 Wait>RefreshTime
 
 Message>Snapshoting...
@@ -47,7 +41,7 @@ Wait>1
 Press CTRL
 Send>a
 Release CTRL
-Wait>2
+Wait>1
 Press CTRL
 Send>c
 Release CTRL
