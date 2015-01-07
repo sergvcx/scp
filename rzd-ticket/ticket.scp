@@ -1,28 +1,33 @@
 
-	
+Let>WW_TIMEOUT=10	
 Let>Period=40
 Let>RefreshTime=5
 Let>SK_DELAY=15
 Let>window_title=Расписание, стоимость билетов*
+
 WaitWindowOpen>window_title
 Message>Сканирование начато...
 Wait>1
 
-//------------------  refresh --------------------
+//------------------  wait refresh --------------------
 Label>WaitTicket
-Let>Faults=0
-Let>WW_TIMEOUT=30
-WaitWindowOpen>window_title
-If>WW_RESULT=FALSE	
-	Message>WTH c окошком
+Message>Обновляем...
+
+IfWindowOpen>window_title
+	SetFocus>window_title
+	WaitWindowOpen>window_title
+	If>WW_RESULT=FALSE,NoWindow
+Else
 	Goto>NoWindow
 Endif
-SetFocus>window_title
-Message>Обновляем...
-Wait>1
-SetFocus>window_title
+
 PlayWav>click.wav
 Press F5
+Message>Ждем когда появится
+Wait>0.2
+WaitWindowOpen>window_title
+Message>Появилось
+Wait>1
 
 //-------------------- snap shot------------
 Label>TrySnapShot
@@ -53,6 +58,18 @@ Wait>1
 DeleteFile>clip.txt
 GetClipBoard>RzdClip
 WriteLn>clip.txt,result,RzdClip
+
+
+Position>Сервер не отвечает. Попробуйте обновить страницу,RzdClip,1,result
+If>result>1
+	Message>Сервер не отвечает! Обновляем...
+	wait>1
+	PlayWav>notify.wav
+	Wait>Period
+	goto>WaitTicket
+Endif
+
+
 //Message>RzdClip
 Position>БЕРЕЩИНО - МОСКВА,RzdClip,1,result
 If>result=0
@@ -72,14 +89,7 @@ If>result>1
 	goto>TrySnapShot
 Endif
 
-Position>Сервер не отвечает. Попробуйте обновить страницу,RzdClip,1,result
-If>result>1
-	Message>Сервер не отвечает! Обновляем...
-	wait>1
-	PlayWav>notify.wav
-	Wait>Period
-	goto>WaitTicket
-Endif
+
 
 
 Position>Не найдено ни одного поезда прямого сообщения,RzdClip,1,result
@@ -145,10 +155,11 @@ MessageModal>Отправка окончена!!!
 Exit>
 //-------------------------------------------
 Label>NoWindow
-Let>Msg= Сканер встал!!!
+Let>Msg=Сканер встал!!!
 Let>SMTP_AUTH=1
 Let>SMTP_USERID=info@hotel360.ru
 Let>SMTP_PASSWORD=info
-SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,Tickets,Msg
-
+SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,WTF Tickets,Error in scanner
+Wait>10
+MessageModal>Отправка окончена!!!
 
