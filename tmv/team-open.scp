@@ -19,6 +19,7 @@ IfWindowOpen>TeamViewer*
 		//Message>windowname
 		//PlayWav>notify.wav
 		Wait>0.5
+		Message> Waiting for "Идентификация TeamViewer"
 		PlayWav>click.wav
 		goto>WaitLogon
 	Endif
@@ -27,11 +28,16 @@ Else
 	
 Endif
 
-WaitWindowOpen>sergvcx - TeamViewer*
-SetFocus>sergvcx - TeamViewer*
-WaitWindowOpen>sergvcx - TeamViewer*
+Let>Remote=sergvcx - TeamViewer*
+//Let>Remote=IDIMM*
+Message> Waiting Remote
+WaitWindowOpen>Remote
+Message> Focusing Remote
+SetFocus>Remote
+WaitWindowOpen>Remote
 PlayWav>notify.wav
 Wait>1
+
 
 Label>FindButtom
 GetScreenRes>X,Y

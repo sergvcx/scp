@@ -1,0 +1,7 @@
+Label>CloseTV
+IfWindowOpen>Спонсируемый сеанс*
+	SetFocus>Спонсируемый сеанс*
+	Press Enter
+Endif
+Wait> 20
+Goto>CloseTV
