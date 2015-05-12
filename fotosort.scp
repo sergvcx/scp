@@ -34,7 +34,7 @@ Repeat>k
 	MessageModal>%jpg%,%jpg_date%,%jpg_time%, 
 	Gosub>AbsDateTime,%jpg_date%,%jpg_time%
 	Let>Diff=ADT-LADT
-	IF {1>30}
+	IF {Diff>30}
 		MessageModal>Create Dir %Diff% %Jpg% %ADT% %LADT%
 		Let>CurDir=%jpg_date%_%jpg_time%
 		//MessageModal>%CurDir%
