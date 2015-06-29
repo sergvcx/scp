@@ -1,33 +1,32 @@
 
 Let>WW_TIMEOUT=10	
-Let>Period=200
+Let>Period=180
 Let>RefreshTime=5
 Let>SK_DELAY=15
-Let>window_title=Расписание, стоимость билетов*
+//SetFocus>Error - Google Chrome*
+//Let>window_title=Расписание, стоимость билетов*
+Let>window_title=Chrome*
 
-WaitWindowOpen>window_title
+
 Message>Сканирование начато...
 Wait>1
 
 //------------------  wait refresh --------------------
 Label>WaitTicket
+
+Let>WW_TIMEOUT=30
+SetFocus>window_title
+WaitWindowOpen>window_title
+If>WW_RESULT=FALSE,NoWindow   // Хром пропал 
+
 Message>Обновляем...
-
-IfWindowOpen>window_title
-	SetFocus>window_title
-	WaitWindowOpen>window_title
-	If>WW_RESULT=FALSE,NoWindow
-Else
-	Goto>NoWindow
-Endif
-
+Wait>1 
+SetFocus>Chrome*
 PlayWav>click.wav
 Press F5
-Message>Ждем когда появится
-Wait>0.2
-WaitWindowOpen>window_title
-Message>Появилось
-Wait>1
+Message>Ждем когда появится контент...
+Wait>0.5
+
 
 //-------------------- snap shot------------
 Label>TrySnapShot
@@ -67,7 +66,10 @@ Endif
 //Message>RzdClip
 //Position>БЕРЕЩИНО - МОСКВА,RzdClip,1,result
 Position>САНКТ-ПЕТЕРБУРГ - МОСКВА,RzdClip,1,result
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9888443d35aa98ee957ab57cdf435f5314f86379
 If>result=0
 	Message>не найдено направления. Еще разок...
 	wait>1
@@ -84,9 +86,6 @@ If>result>1
 	PlayWav>notify.wav
 	goto>TrySnapShot
 Endif
-
-
-
 
 Position>Не найдено ни одного поезда прямого сообщения,RzdClip,1,result
 If>result>1
@@ -152,10 +151,11 @@ Exit>
 //-------------------------------------------
 Label>NoWindow
 Let>Msg=Сканер встал!!!
+Message>Msg
 Let>SMTP_AUTH=1
 Let>SMTP_USERID=info@hotel360.ru
 Let>SMTP_PASSWORD=info
 SMTPSendMail>sergvcx@mail.ru,hotel360.ru,info@hotel360.ru,rzd_scanner,WTF Tickets,Error in scanner
 Wait>10
 MessageModal>Отправка окончена!!!
-
+Press
