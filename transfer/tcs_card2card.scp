@@ -1,0 +1,24 @@
+
+ReadIniFile>ini,name,card,card
+Separate>card, ,num
+
+Let>SK_DELAY=60
+SetFocus>Chrome*
+wait> 0.2
+SendText>%num_1%
+wait> 0.2
+SendText>%num_2%
+wait> 0.2
+SendText>%num_3%
+wait> 0.2
+SendText>%num_4%
+wait> 0.2
+Press TAB
+wait> 0.2
+SendText>%num_5%
+wait> 0.2
+Press TAB
+SendText>%num_6%
+wait> 0.2
+Press TAB
+Press TAB

@@ -1,0 +1,35 @@
+// https://pay.mts.ru/webportal/payments/3257
+
+ReadIniFile>ini,name,card,card
+ReadIniFile>ini,name,mail,mail
+Separate>card, ,num
+
+Let>SK_DELAY=60
+SetFocus>Chrome*
+#SetFocus>Firefox*
+
+SendText>%tel%
+Press TAB
+wait>0.5
+
+SendText>100
+Press TAB
+wait>0.5
+
+SendText>%num_1%
+SendText>%num_2%
+SendText>%num_3%
+SendText>%num_4%
+
+//Press TAB
+wait>0.5
+SendText>%num_5%
+
+
+wait>0.5
+SendText>%num_6%
+
+
+wait>0.5
+SendText>%mail%
+   

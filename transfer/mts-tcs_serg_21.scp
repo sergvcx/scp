@@ -1,0 +1,4 @@
+// https://pay.mts.ru/webportal/payments/3257
+ReadIniFile>.\tel.ini,mama-222,tel,tel
+let>name=serg
+include>mts.scp
