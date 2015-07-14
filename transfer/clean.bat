@@ -1,1 +1,1 @@
-del *.scp
+del *.ini
