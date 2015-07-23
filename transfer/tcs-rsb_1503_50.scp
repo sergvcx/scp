@@ -1,3 +1,4 @@
 // 20.08.2014.50.000  251/3 RSB Travel Classic - 50 
+let>ini=.\rsb.ini
 let>name=RSB Travel Classic
 include>tcs_card2card.scp

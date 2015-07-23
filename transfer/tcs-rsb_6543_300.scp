@@ -1,3 +1,4 @@
 // 5100 9292 1856 6543 0218 --- 22.02.2013.300.000 236/1 РС Голд Cross-Sale MC 
+let>ini=.\rsb.ini
 let>name=Cross-Sale MC
 include>tcs_card2card.scp

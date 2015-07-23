@@ -1,10 +1,10 @@
 
 ReadIniFile>ini,name,card,card
 Separate>card, ,num
-
 Let>SK_DELAY=60
 SetFocus>Chrome*
-wait> 0.2
+WaitWindowOpen>Chrome*
+wait> 2
 SendText>%num_1%
 wait> 0.2
 SendText>%num_2%

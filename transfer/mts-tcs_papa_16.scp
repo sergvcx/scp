@@ -1,4 +1,5 @@
-﻿// https://pay.mts.ru/webportal/payments/3257
+﻿//https://pay.mts.ru/webportal/payments/3565
 ReadIniFile>.\tel.ini,serg-8881,tel,tel
+let>ini=.\tcs.ini
 let>name=papa
 include>mts.scp

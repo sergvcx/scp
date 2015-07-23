@@ -9,7 +9,7 @@ SetFocus>Chrome*
 #SetFocus>Firefox*
 
 SendText>%tel%
-Press TAB
+//Press TAB
 wait>0.5
 
 SendText>100
