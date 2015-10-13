@@ -52,11 +52,24 @@ DeleteFile>clip.txt
 GetClipBoard>RzdClip
 WriteLn>clip.txt,result,RzdClip
 
+//------------------ обрабатываем результаты копипасты -----------------
+// Невозможно установить соединение с АСУ
+// Сервер не отвечает. 
 
-Position>Сервер не отвечает. Попробуйте обновить страницу,RzdClip,1,result
+Position>Невозможно установить соединение с АСУ,RzdClip,1,result
 If>result>1
-	Message>Сервер не отвечает! Обновляем...
-	wait>1
+	Message>Поебень на сервере. [Невозможно..] 5 сек и обновляем...
+	wait>5
+	PlayWav>notify.wav
+	Wait>Period
+	goto>WaitTicket
+Endif
+
+
+Position>Сервер не отвечает,RzdClip,1,result
+If>result>1
+	Message>Поебень на сервере. [Сервер не отвечает..] 5сек и обновляем...
+	wait>5
 	PlayWav>notify.wav
 	Wait>Period
 	goto>WaitTicket
@@ -65,31 +78,27 @@ Endif
 
 //Message>RzdClip
 //Position>БЕРЕЩИНО - МОСКВА,RzdClip,1,result
-Position>САНКТ-ПЕТЕРБУРГ - МОСКВА,RzdClip,1,result
-<<<<<<< HEAD
-
-=======
->>>>>>> 9888443d35aa98ee957ab57cdf435f5314f86379
-If>result=0
-	Message>не найдено направления. Еще разок...
-	wait>1
-	Message>RzdClip
-	wait>1
-	PlayWav>notify.wav
-	Goto>TrySnapShot
-Endif
+//Position>БЕРЕЩИНО - МОСКВА,RzdClip,1,result
+//If>result=0
+//	Message>не найдено направления. Еще разок...
+//	wait>1
+//	Message>RzdClip
+//	wait>1
+//	PlayWav>notify.wav
+//	Goto>TrySnapShot
+//Endif
 
 Position>Идет процесс обработки данных,RzdClip,1,result
 If>result>1
-	Message>Идет процесс обработки данных. Еще разок...
-	wait>1
+	Message>[Идет процесс обработки данных...] 5сек+Еще скриншот...
+	wait>5
 	PlayWav>notify.wav
 	goto>TrySnapShot
 Endif
 
 Position>Не найдено ни одного поезда прямого сообщения,RzdClip,1,result
 If>result>1
-	Message>Грят что никуя не найдено! Обновляем...
+	Message>Грят что [Не найдено ни одного поезда...] Ждем %Period% и обновляем...
 	wait>1
 	PlayWav>tick.wav
 	Wait>Period
@@ -106,10 +115,10 @@ Endif
  
 Position>Плацкартный	,RzdClip,1,result
 If>result>1
-	Message>Есть плацкартный!
+	Message>Нашли [плацкартный]!
 	Wait>1	
 else 
-	Message>Есть  билеты, но нет плацкарты - Накуй! Обновляем...
+	Message>Есть  билеты, но нет плацкарты - Накуй! Ждем %Period% ... и обновляем...
 	wait>1
 	PlayWav>tick.wav
 	Wait>Period
