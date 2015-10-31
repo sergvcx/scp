@@ -2,9 +2,18 @@
 ReadIniFile>ini,name,card,card
 Separate>card, ,num
 Let>SK_DELAY=60
-SetFocus>Chrome*
+//SetFocus>Chrome*
+//WaitWindowOpen>Chrome*
+SetFocus>Notepad*
+WaitWindowOpen>Notepad*
+
+Message>Ready 3 %num_1% %num_2% %num_3% %num_4%
+wait> 0.5
+Message>Ready 2 %num_1% %num_2% %num_3% %num_4%
+wait> 0.5
+Message>Ready 1 %num_1% %num_2% %num_3% %num_4%
+wait> 0.5
 WaitWindowOpen>Chrome*
-wait> 2
 SendText>%num_1%
 wait> 0.2
 SendText>%num_2%
