@@ -1,6 +1,6 @@
 
 Let>WW_TIMEOUT=10	
-Let>Period=180
+Let>Period=500
 Let>RefreshTime=5
 Let>SK_DELAY=15
 //SetFocus>Error - Google Chrome*
@@ -58,7 +58,7 @@ WriteLn>clip.txt,result,RzdClip
 
 Position>Невозможно установить соединение с АСУ,RzdClip,1,result
 If>result>1
-	Message>Поебень на сервере. [Невозможно..] 5 сек и обновляем...
+	Message>Поебень на сервере. [Невозможно..] %Period% сек и обновляем...
 	wait>5
 	PlayWav>notify.wav
 	Wait>Period
@@ -68,7 +68,7 @@ Endif
 
 Position>Сервер не отвечает,RzdClip,1,result
 If>result>1
-	Message>Поебень на сервере. [Сервер не отвечает..] 5сек и обновляем...
+	Message>Поебень на сервере. [Сервер не отвечает..] %Period%  сек и обновляем...
 	wait>5
 	PlayWav>notify.wav
 	Wait>Period
