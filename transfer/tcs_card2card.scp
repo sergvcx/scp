@@ -1,33 +1,39 @@
+SRT>WaitType
+	Wait>0.2
+	PutClipBoard>%WaitType_Var_1%
+	Press SHIFT
+	Press Ins
+	Relese SHIFT
+End>WaitType
 
 ReadIniFile>ini,name,card,card
 Separate>card, ,num
 Let>SK_DELAY=60
-//SetFocus>Chrome*
-//WaitWindowOpen>Chrome*
-SetFocus>Notepad*
-WaitWindowOpen>Notepad*
+Let>App=Chrome*
+SetFocus>%App%
+WaitWindowOpen>%App%
+SetFocus>%App%
+WaitWindowOpen>%App%
 
-Message>Ready 3 %num_1% %num_2% %num_3% %num_4%
+Message>Ready 3 %num_1%-%num_2%-%num_3%-%num_4% %num_5%
 wait> 0.5
-Message>Ready 2 %num_1% %num_2% %num_3% %num_4%
+Message>Ready 2 %num_1%-%num_2%-%num_3%-%num_4% %num_5%
 wait> 0.5
-Message>Ready 1 %num_1% %num_2% %num_3% %num_4%
+Message>Ready 1 %num_1%-%num_2%-%num_3%-%num_4% %num_5%
 wait> 0.5
-WaitWindowOpen>Chrome*
-SendText>%num_1%
-wait> 0.2
-SendText>%num_2%
-wait> 0.2
-SendText>%num_3%
-wait> 0.2
-SendText>%num_4%
-wait> 0.2
+SetFocus>%App%
+wait> 0.5
+
+Gosub>WaitType,%num_1%
+Gosub>WaitType,%num_2%
+Gosub>WaitType,%num_3%
+Gosub>WaitType,%num_4%
+
 Press TAB
-wait> 0.2
+#Gosub>WaitType,%num_5%
 SendText>%num_5%
-wait> 0.2
 Press TAB
 SendText>%num_6%
-wait> 0.2
 Press TAB
 Press TAB
+		
