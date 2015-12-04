@@ -1,7 +1,8 @@
 ;#include "typewriter.au3"
-WinActivate ("Расписание")
+WinActivate ("TW")
 
-
+#include <MsgBoxConstants.au3>
+#include <StringConstants.au3>
 
     
 ;    For $i = 1 To $aNum[0] ; Loop through the array returned by StringSplit to display the individual values.
@@ -13,37 +14,53 @@ WinActivate ("Расписание")
 
 ;Exit(0)
 
-$ini = "hkb.ini"
+$ini = "plastic.ini"
 $section = "hkb"
-$card = IniRead ( $ini, $section, "card", "" )
+$card  = IniRead ( $ini, $section, "card", "" )
+$name  = IniRead ( $ini, $section, "name", "" )
+$month = IniRead ( $ini, $section, "month", "" )
+$year  = IniRead ( $ini, $section, "year", "" )
+$ccc   = IniRead ( $ini, $section, "ccc", "" )
 
-Local $aNum = StringSplit($card, " ") 
+$card  = StringStripWS($card, $STR_STRIPALL )
+
+
+
+;Local $aNum = StringSplit($card, " ") 
 ; MsgBox($MB_SYSTEMMODAL, "", "The value of 'Title' in the section labelled 'General' is: " & $card)
+; MsgBox($MB_SYSTEMMODAL, "", "year: " & $year)
 
 Sleep(200)
-Send($aNum[1]) 
+Send($card) 
+Send("{TAB}") 
 Sleep(100)
-Send($aNum[2])
+;Send($aNum[2])
+;Sleep(100)
+;Send($aNum[3]) 
+;Sleep(100)
+;Send($aNum[4]) 
+;Sleep(100)
+;
 Sleep(100)
-Send($aNum[3]) 
+Send($ccc)
+Send("{TAB}") 
+;
 Sleep(100)
-Send($aNum[4]) 
+Send($name)
+Send("{TAB}") 
 Sleep(100)
-;Send("{TAB}")
-Send($aNum[5])
+For $m = 1 To $month Step 1
+    Send("{DOWN}") 
+	Sleep(100)
+Next
 Sleep(100)
-;Send("{TAB}") 
-Send($aNum[6])
-
+Send("{TAB}") 
 Sleep(100)
-;Send("{TAB}") 
-Send($mail)
-;Send(SERGEY MUSHKAEV)
 
+For $y = 15 To $year Step 1
+    Send("{DOWN}") 
+	Sleep(100)
+Next
 
-;Send("{TAB}{TAB}") 
-
-;EndFunc   ;==>TestFunc1
-
-
-;TcsCard2Card("tel.ini","serg8881")
+Send("{TAB}") 
+Sleep(100)
