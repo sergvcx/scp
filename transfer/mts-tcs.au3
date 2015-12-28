@@ -1,7 +1,9 @@
 ;#include "typewriter.au3"
 WinActivate ("MTC")
+$browser = "MTC"
 #include <MsgBoxConstants.au3>
 #include <StringConstants.au3>
+#include "keyboard.au3"
 ;https://pay.mts.ru/webportal/payments/3565/Moskva
 
 
@@ -20,11 +22,11 @@ $choice = InputBox( "Choose telephone", "1: Сергей 8881"& @CRLF & "2: Па
 
 Switch $choice
 	Case 1
-		$section   = "serg8881"
+		$section   = "serg-8881"
 	Case 2
 		$section   = "papa"
 	Case 3
-		$section   = "mama0222"
+		$section   = "mama-0222"
 EndSwitch
 
 $ini = "tel.ini"
@@ -53,16 +55,25 @@ $card  = StringStripWS($card, $STR_STRIPALL )
 ;MsgBox($MB_SYSTEMMODAL, "", "card=" & $card)
 ;Local $aNum = StringSplit($card, " ") 
 ;MsgBox($MB_SYSTEMMODAL, "", "The value of 'Title' in the section labelled 'General' is: " & $card)
+$hWnd=WinGetHandle ($browser)
+$lang=_WinAPI_GetKeyboardLayout($hwnd);
+;MsgBox($MB_SYSTEMMODAL, "", "Ru/En" & $lang )
+if $lang = $RU Then
+	;MsgBox($MB_SYSTEMMODAL, "", "Ru->En" )
+	_WinAPI_SetKeyboardLayout($EN, $hWnd)
+Endif	
+
 
 Sleep(200)
 Send($tel) 
-Sleep(1000)
+Sleep(500)
 
-Send("100")
-Sleep(1000)
+Send(100)
+Send("{TAB}") 
+Sleep(500)
 
 Send($card) 
-Sleep(100)
+Sleep(500)
 
 Send($month) 
 Sleep(500)
