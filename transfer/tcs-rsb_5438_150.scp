@@ -1,5 +1,0 @@
-// г: 0 5100 9298 2221 5438 1016  10.08.2011.150.000 99.2 0% MasterCard Gold
-
-let>ini=.\rsb.ini
-let>name=MasterCard Gold
-include>tcs_card2card.scp
