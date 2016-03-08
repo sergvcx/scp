@@ -1,11 +1,11 @@
 
 #include <MsgBoxConstants.au3>
 while 1 
-	if WinExists ( "TeamViewer_Desktop") Then
-		WinActivate ("TeamViewer_Desktop")
-		Sleep(500)
-		Send("{ENTER}") 
-	Endif 
+	;if WinExists ( "TeamViewer_Desktop") Then
+	;	WinActivate ("TeamViewer_Desktop")
+	;	Sleep(500)
+	;	Send("{ENTER}") 
+	;Endif 
 	;---------------------------
 	if WinExists ( "Спонсируемый сеанс") Then
 		WinActivate ("Спонсируемый сеанс")
