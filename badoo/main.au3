@@ -35,7 +35,7 @@ $i = 0
 While $i <= 100
 	If WinActive("Badoo") Then
 		MouseClick("left")
-		Sleep(1000)
+		Sleep(60000)
 	Endif
 WEnd
 

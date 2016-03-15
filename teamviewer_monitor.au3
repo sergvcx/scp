@@ -5,7 +5,15 @@ while 1
 	;	WinActivate ("TeamViewer_Desktop")
 	;	Sleep(500)
 	;	Send("{ENTER}") 
-	;Endif 
+	;Endif
+	;--------------------------- #32770
+	if WinExists ( "TeamViewer 11") Then
+		WinActivate ("TeamViewer 11")
+		Sleep(500)
+		Send("{ENTER}") 
+		Sleep(10000)
+		Run("C:\Program Files (x86)\TeamViewer\TeamViewer.exe")
+	Endif 	
 	;---------------------------
 	if WinExists ( "Спонсируемый сеанс") Then
 		WinActivate ("Спонсируемый сеанс")
