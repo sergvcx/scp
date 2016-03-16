@@ -44,6 +44,13 @@ While $i <= 100
 			MouseClick("left")
 			Sleep(1000)
 		EndIf 
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_connect.png", 10)
+		If $searchResult[0] <> -1 Then
+			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
+			MouseMove($searchResult[0],$searchResult[1],0)
+			MouseClick("left")
+			Sleep(1000)
+		EndIf 
 		
 		Sleep(10000)
 	Endif
