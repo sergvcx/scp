@@ -27,11 +27,11 @@ while 1
 		Send("{ENTER}") 
 	Endif 
 	;-------------------------
-	if WinExists ( "TeamViewer - журнал регистрации") Then
-		WinActivate ("TeamViewer - журнал регистрации")
-		Sleep(500)
-		ControlClick ("TeamViewer - журнал регистрации","","Закрыть") 
-	Endif 
+	;if WinExists ( "TeamViewer - журнал регистрации") Then
+;		WinActivate ("TeamViewer - журнал регистрации")
+;		Sleep(500)
+;		ControlClick ("TeamViewer - журнал регистрации","","Закрыть") 
+;	Endif 
 	;-------------------------
 	;Local $hWnd = WinActive("[CLASS:CNotificationWindow]")
 	If WinExists ( "[CLASS:CNotificationWindow]"  )  Then 

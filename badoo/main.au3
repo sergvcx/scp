@@ -23,19 +23,29 @@ EndFunc
 
 $likeFile = "like.bmp" 
 
-$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, $likeFile, 10)
-If $searchResult[0] <> -1 Then
-	ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
-	MouseMove($searchResult[0],$searchResult[1],0)
-	Sleep(1000)
-EndIf 
 
 $i = 0
 
 While $i <= 100
+	WinActivate ("Badoo")
 	If WinActive("Badoo") Then
-		MouseClick("left")
-		Sleep(60000)
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, $likeFile, 10)
+		If $searchResult[0] <> -1 Then
+			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
+			MouseMove($searchResult[0],$searchResult[1],0)
+			MouseClick("left")
+			MouseMove(0,0,0)
+			Sleep(1000)
+		EndIf 
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_close.png", 10)
+		If $searchResult[0] <> -1 Then
+			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
+			MouseMove($searchResult[0],$searchResult[1],0)
+			MouseClick("left")
+			Sleep(1000)
+		EndIf 
+		
+		Sleep(10000)
 	Endif
 WEnd
 
