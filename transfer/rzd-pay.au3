@@ -57,7 +57,7 @@ Sleep(100)
 Send("{TAB}") 
 Sleep(100)
 
-For $y = 15 To $year Step 1
+For $y = 16 To $year Step 1
     Send("{DOWN}") 
 	Sleep(100)
 Next

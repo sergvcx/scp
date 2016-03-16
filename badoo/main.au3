@@ -29,6 +29,10 @@ $i = 0
 While $i <= 100
 	WinActivate ("Badoo")
 	If WinActive("Badoo") Then
+	
+		Local $sText =WinGetText("Badoo");
+		MsgBox($MB_SYSTEMMODAL, "", $sText)
+
 		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, $likeFile, 10)
 		If $searchResult[0] <> -1 Then
 			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
@@ -51,6 +55,7 @@ While $i <= 100
 			MouseClick("left")
 			Sleep(1000)
 		EndIf 
+		
 		
 		Sleep(10000)
 	Endif
