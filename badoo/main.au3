@@ -57,9 +57,9 @@ While $i <= 100
 		
 		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_profile.png", 10)
 		If $searchResult[0] <> -1 Then
+			Sleep(Random(1000,5000))
 			MouseMove($searchResult[0],$searchResult[1],0)
 			MouseClick("left")
-			Sleep(1000)
 			
 			$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_rating.png", 10)
 			If $searchResult[0] <> -1 Then
@@ -99,7 +99,7 @@ While $i <= 100
 		EndIf 
 		
 		
-		Sleep(20000)
+		Sleep(Random(5000,30000))
 	Endif
 WEnd
 
