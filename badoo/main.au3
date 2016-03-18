@@ -21,6 +21,30 @@ Func Terminate()
     Exit
 EndFunc
 
+Func PressLike()
+    $searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "like.bmp" , 10)
+	If $searchResult[0] <> -1 Then
+		MouseMove($searchResult[0],$searchResult[1],0)
+		Sleep(500)
+		MouseClick("left")
+		MouseMove(0,0,0)
+		Sleep(500)
+	EndIf 
+EndFunc
+
+Func PressDislike()
+    $searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_dislike.png" , 10)
+	If $searchResult[0] <> -1 Then
+		MouseMove($searchResult[0],$searchResult[1],0)
+		Sleep(500)
+		MouseClick("left")
+		MouseMove(0,0,0)
+		Sleep(500)
+	EndIf 
+EndFunc
+
+
+
 $likeFile = "like.bmp" 
 
 
@@ -31,14 +55,33 @@ While $i <= 100
 	If WinActive("Badoo") Then
 	
 		
-		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, $likeFile, 10)
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_profile.png", 10)
 		If $searchResult[0] <> -1 Then
-			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
 			MouseMove($searchResult[0],$searchResult[1],0)
 			MouseClick("left")
-			MouseMove(0,0,0)
 			Sleep(1000)
-		EndIf 
+			
+			$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_rating.png", 10)
+			If $searchResult[0] <> -1 Then
+				MouseMove($searchResult[0],$searchResult[1],0)
+				MouseClickDrag ( "left", $searchResult[0],$searchResult[1]+50, $searchResult[0]+100,$searchResult[1]+100 )
+				Send("{CTRLDOWN}c{CTRLUP}")
+				$rating=Number(StringReplace(ClipGet(),",","."));
+				
+				if $rating>6.2 Then
+					;MsgBox($MB_SYSTEMMODAL, "", "good girl" & $rating)
+					PressLike()
+				Else 
+					;MsgBox($MB_SYSTEMMODAL, "", "bad   girl" & $rating)
+					PressDislike();
+				Endif
+			Else
+				PressLike()
+			EndIf 
+		Endif
+		
+		
+	
 		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_close.png", 10)
 		If $searchResult[0] <> -1 Then
 			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
@@ -46,6 +89,7 @@ While $i <= 100
 			MouseClick("left")
 			Sleep(1000)
 		EndIf 
+	
 		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_connect.png", 10)
 		If $searchResult[0] <> -1 Then
 			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
@@ -55,7 +99,7 @@ While $i <= 100
 		EndIf 
 		
 		
-		Sleep(30000)
+		Sleep(20000)
 	Endif
 WEnd
 
