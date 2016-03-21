@@ -29,7 +29,7 @@ Func PressLike()
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I Like", "I like " & $i,1)
+					;MsgBox(0, "I Like", "I like " & $i,1)
 					_IEAction($ooTag, 'click')
 				EndIf
 			Next
@@ -54,7 +54,7 @@ Func PressDisLike()
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I don't Like", "I don't like " & $i,1)
+					;MsgBox(0, "I don't Like", "I don't like " & $i,1)
 					_IEAction($ooTag, 'click')
 					Sleep(1000)
 					_IEAction($ooTag, 'click')
@@ -102,7 +102,7 @@ Func CloseInvite()
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "icon-svg icon-svg--white js-ovl-close" Then
-			MsgBox(0, "Invite ?", "Fuck Off",1)
+			;MsgBox(0, "Invite ?", "Fuck Off",1)
 			_IEAction($oTag, 'click')
 			Sleep(Random(2000,50000))
 			return 
@@ -146,7 +146,7 @@ Func ClickImage()
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "photo-gallery__link photo-gallery__link--next js-gallery-next" Then
-			MsgBox(0, "Click  ?", "on image",1)
+			;MsgBox(0, "Click  ?", "on image",1)
 			Sleep(1000)
 			_IEAction($oTag, 'click')
 			Sleep(1000)
@@ -166,7 +166,7 @@ EndFunc
 
 
 While $i <= 600
-	MsgBox(0, "counter", $i,1)
+	;MsgBox(0, "counter", $i,1)
 	
 	CloseInvite()
 	;_IEImgClick($oIE,"//pcache-eu1.")
