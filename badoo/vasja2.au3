@@ -3,7 +3,7 @@
 #include <String.au3>
 #include <Array.au3>
 
-
+$i = 0
 ;Local $oIE = _IE_Example("form")
 local $oIE=_IECreate("http://badoo.com")
 
@@ -21,7 +21,7 @@ Func PressLike()
 			Local $ooTags = _IETagNameGetCollection($oTag, "span")
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I Like", "I like",1)
+					MsgBox(0, "I Like", "I like " & $i,1)
 					_IEAction($ooTag, 'click')
 				EndIf
 			Next
@@ -37,7 +37,7 @@ Func PressDisLike()
 			Local $ooTags = _IETagNameGetCollection($oTag, "span")
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I don't Like", "I don't like",1)
+					MsgBox(0, "I don't Like", "I don't like " & $i,1)
 					_IEAction($ooTag, 'click')
 				EndIf
 			Next
@@ -75,16 +75,19 @@ Func CloseInvite()
 	For $oTag In $oTags
 		If $oTag.className = "icon-svg icon-svg--white js-ovl-close" Then
 			MsgBox(0, "close invite", "I don't like")
-			_IEAction($ooTag, 'click')
+			_IEAction($oTag, 'click')
+			Sleep(Random(5000,30000))
 			return 
 		EndIf
 	Next
+	
 EndFunc
 
 
-$i = 0
+
 While $i <= 600
 	;MsgBox(0, "counter", $i,1)
+	
 	CloseInvite()
 	Local $score = GetScore()
 	if $score >6.2 Then
@@ -94,6 +97,6 @@ While $i <= 600
 	Else
 		PressDisLike()
 	EndIf
-	Sleep(1000)
+	;Sleep(Random(2000,5000))
 	$i=$i+1
 WEnd
