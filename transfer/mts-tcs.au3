@@ -18,7 +18,7 @@ $browser = "MTC"
 
 ;Exit(0)
 
-$choice = InputBox( "Choose telephone", "1: Сергей 8881"& @CRLF & "2: Папа "& @CRLF &  "3: Мама 0222" )
+$choice = InputBox( "Choose telephone", "1: Сергей 8881"& @CRLF & "2: Папа "& @CRLF &  "3: Мама 0222" &  "3: Мама 2414" )
 
 Switch $choice
 	Case 1
@@ -27,6 +27,8 @@ Switch $choice
 		$section   = "papa"
 	Case 3
 		$section   = "mama-0222"
+	Case 4
+		$section   = "mama-2414"
 EndSwitch
 
 $ini = "tel.ini"
