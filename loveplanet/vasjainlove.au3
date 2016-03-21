@@ -5,7 +5,7 @@
 
 $i = 0
 ;Local $oIE = _IE_Example("form")
-local $oIE=_IECreate("http://badoo.com")
+local $oIE=_IECreate("https://loveplanet.ru/a-search/item-1/d-1/foto-1/p-0/pol-1/spol-2/geo-3159,4312,4400/bage-20/tage-28/gmap-1/country-3159/region-4312/city-4400/")
 
 Sleep(2000)
 
@@ -14,25 +14,28 @@ Func Terminate()
     Exit
 EndFunc
 
+
+
 Func PressLike()
-	Local $oTags = _IETagNameGetCollection($oIE, "div")
+	Local $oTags = _IETagNameGetCollection($oIE, "a")
 	if @error Then
 		MsgBox(0,"Error","in PressLike 1")
 		return
 	EndIf
 	For $oTag In $oTags
-		If $oTag.className = "btn-game btn-game--hot js-profile-header-vote-yes" Then
-			Local $ooTags = _IETagNameGetCollection($oTag, "span")
-			if @error Then
-				MsgBox(0,"Error","in PressLike 2")
-				return
-			EndIf
-			For $ooTag In $ooTags
-				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I Like", "I like " & $i,1)
-					_IEAction($ooTag, 'click')
-				EndIf
-			Next
+		If $oTag.className = "gbut_grd_green gnl_but36 w190" Then
+				_IEAction($oTag, 'click')
+			;Local $ooTags = _IETagNameGetCollection($oTag, "span")
+			;if @error Then
+			;	MsgBox(0,"Error","in PressLike 2")
+			;	return
+			;EndIf
+			;For $ooTag In $ooTags
+			;	If $ooTag.className = "b-link js-profile-header-vote" Then
+			;		MsgBox(0, "I Like", "I like " & $i,1)
+			;		_IEAction($ooTag, 'click')
+			;	EndIf
+			;Next
 		EndIf
 	Next
 EndFunc
@@ -165,23 +168,10 @@ EndFunc
 ;</div>
 
 
+
+
 While $i <= 600
-	MsgBox(0, "counter", $i,1)
-	
-	CloseInvite()
-	;_IEImgClick($oIE,"//pcache-eu1.")
-	ClickImage()
-	Sleep(1000)
-	Local $score = GetScore()
 	PressLike()
-	if $score >6.2 Then
-		PressLike()
-	ElseIf	$score==0 Then
-		PressLike()
-	Else
-		PressDisLike()
-	EndIf
-	;PressLike()
 	Sleep(Random(2000,5000))
 	$i=$i+1
 WEnd
