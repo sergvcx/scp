@@ -47,13 +47,16 @@ Func PressDisLike()
 	For $oTag In $oTags
 		If $oTag.className = "btn-game btn-game--not js-profile-header-vote-no" Then
 			Local $ooTags = _IETagNameGetCollection($oTag, "span")
+			
 			if @error Then
-				MsgBox(0,"Error","in PressDisLike 2")
+				MsgBox(0,"Error","in PressDisLike 2" )
 				return
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
 					MsgBox(0, "I don't Like", "I don't like " & $i,1)
+					_IEAction($ooTag, 'click')
+					Sleep(1000)
 					_IEAction($ooTag, 'click')
 				EndIf
 			Next
@@ -118,11 +121,14 @@ Func ClickImage()
 	For $oTag In $oTags
 		If $oTag.className = "photo-gallery__photo js-mm-photo-holder" Then
 			Local $ooImgs = _IEImgGetCollection($oTag)
-			For $oImgs In $ooImgs
+			For $ooImg In $ooImgs
 				;If $ooTag.className = "js-mm-photo" Then
-				MsgBox(0, "Click  ?", "on image")
+				$n = @extended
+				MsgBox(0, "Click  ?", "on image" & $n)
 				Sleep(1000)
-				_IEAction($oImgs, 'click')
+				_IEAction($ooImg, 'click')
+				Sleep(1000)
+				_IEAction($ooImg, 'click')
 				Sleep(Random(1000,2000))
 				return 
 				;EndIf
@@ -142,7 +148,8 @@ While $i <= 600
 	
 	CloseInvite()
 	;_IEImgClick($oIE,"//pcache-eu1.")
-	;ClickImage()
+	ClickImage()
+	Sleep(1000)
 	Local $score = GetScore()
 	PressLike()
 	if $score >6.2 Then
