@@ -111,32 +111,54 @@ Func CloseInvite()
 	
 EndFunc
 
- 
+; 
+;Func ClickImage()
+;	Local $oTags = _IETagNameGetCollection($oIE, "div")
+;	if @Error Then
+;		MsgBox(0,"Error","in CloseInvite")
+;		return
+;	EndIf
+;	For $oTag In $oTags
+;		If $oTag.className = "photo-gallery__photo js-mm-photo-holder" Then
+;			Local $ooImgs = _IEImgGetCollection($oTag)
+;			For $ooImg In $ooImgs
+;				;If $ooTag.className = "js-mm-photo" Then
+;				$n = @extended
+;				MsgBox(0, "Click  ?", "on image" & $n)
+;				Sleep(1000)
+;				_IEAction($ooImg, 'click')
+;				Sleep(1000)
+;				_IEAction($ooImg, 'click')
+;				Sleep(Random(1000,2000))
+;				return 
+;				;EndIf
+;			Next
+;		EndIf
+;	Next
+;	
+;EndFunc
+
 Func ClickImage()
-	Local $oTags = _IETagNameGetCollection($oIE, "div")
+	Local $oTags = _IETagNameGetCollection($oIE, "span")
 	if @Error Then
 		MsgBox(0,"Error","in CloseInvite")
 		return
 	EndIf
 	For $oTag In $oTags
-		If $oTag.className = "photo-gallery__photo js-mm-photo-holder" Then
-			Local $ooImgs = _IEImgGetCollection($oTag)
-			For $ooImg In $ooImgs
-				;If $ooTag.className = "js-mm-photo" Then
-				$n = @extended
-				MsgBox(0, "Click  ?", "on image" & $n)
-				Sleep(1000)
-				_IEAction($ooImg, 'click')
-				Sleep(1000)
-				_IEAction($ooImg, 'click')
-				Sleep(Random(1000,2000))
-				return 
-				;EndIf
-			Next
+		If $oTag.className = "photo-gallery__link photo-gallery__link--next js-gallery-next" Then
+			MsgBox(0, "Click  ?", "on image",1)
+			Sleep(1000)
+			_IEAction($oTag, 'click')
+			Sleep(1000)
 		EndIf
 	Next
 	
 EndFunc
+
+;<span class="photo-gallery__link photo-gallery__link--next js-gallery-next">
+;<i class="icon-svg icon-svg--white photo-gallery__arrow photo-gallery__arrow--right"><svg xmlns="http://www.w3.org/2000/svg" class="rtl-reflect icon-svg_"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#gallery-right-arrow" /></svg></i>
+;</span>
+
 
 ;<div class="photo-gallery__photo js-mm-photo-holder">
 ;<img class="js-mm-photo" alt="" src="//pcache-eu1.badoocdn.com/p34/hidden?euri=5QzAExwpNvTDiHwrbP-RPfK-LQkIpTOJclsK3EGSMGmzAA7qqJPSDmoe8VkZCpdRKalCFz1-yvnRlDWQ8kW0bntlhcAhwvq.qkFlfkANKuYKXsXatF858N6vqAWPHMx5kHSY4iqjWML.9qV7E2qTH9r.N51NdDsX&amp;id=19156&amp;size=__size__&amp;wm_size=103x103&amp;wm_offs=18x18">
