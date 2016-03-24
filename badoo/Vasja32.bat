@@ -1,0 +1,1 @@
+c:\Programs\AutoIt3\AutoIt3.exe vasja.au3

@@ -27,7 +27,7 @@ Func PressLike()
 		MouseMove($searchResult[0],$searchResult[1],0)
 		Sleep(500)
 		MouseClick("left")
-		MouseMove(0,0,0)
+		;MouseMove(0,0,0)
 		Sleep(500)
 	EndIf 
 EndFunc
@@ -38,14 +38,13 @@ Func PressDislike()
 		MouseMove($searchResult[0],$searchResult[1],0)
 		Sleep(500)
 		MouseClick("left")
-		MouseMove(0,0,0)
+		;MouseMove(0,0,0)
 		Sleep(500)
 	EndIf 
 EndFunc
 
 
 
-$likeFile = "like.bmp" 
 
 
 $i = 0
@@ -55,13 +54,14 @@ While $i <= 100
 	If WinActive("Badoo") Then
 	
 		
-		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_profile.png", 10)
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_profile.png", 100)
 		If $searchResult[0] <> -1 Then
-			Sleep(Random(1000,5000))
+			Sleep(2000)
 			MouseMove($searchResult[0],$searchResult[1],0)
 			MouseClick("left")
+			Sleep(1000)
 			
-			$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_rating.png", 10)
+			$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_rating.bmp", 100)
 			If $searchResult[0] <> -1 Then
 				MouseMove($searchResult[0],$searchResult[1],0)
 				MouseClickDrag ( "left", $searchResult[0],$searchResult[1]+50, $searchResult[0]+100,$searchResult[1]+100 )
@@ -69,46 +69,47 @@ While $i <= 100
 				$rating=Number(StringReplace(ClipGet(),",","."));
 				
 				if $rating>6.2 Then
-					;MsgBox($MB_SYSTEMMODAL, "", "good girl" & $rating)
+					MsgBox($MB_SYSTEMMODAL, "", "good girl with " & $rating,1)
 					PressLike()
 				Else 
-					;MsgBox($MB_SYSTEMMODAL, "", "bad   girl" & $rating)
+					MsgBox($MB_SYSTEMMODAL, "", "bad   girl with " & $rating, 1)
 					PressDislike();
 				Endif
 			Else
+				MsgBox($MB_SYSTEMMODAL, "", "unrated girl" , 1)
 				PressLike()
 			EndIf 
+		Else 
+			MsgBox($MB_SYSTEMMODAL, "", "Profile not found , count=" & $i, 1)
 		Endif
 		
 		
 	
-		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_close.png", 10)
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_close.png", 100)
 		If $searchResult[0] <> -1 Then
-			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
 			MouseMove($searchResult[0],$searchResult[1],0)
 			MouseClick("left")
 			Sleep(1000)
 		EndIf 
 	
-		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_connect.png", 10)
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_connect.png", 100)
 		If $searchResult[0] <> -1 Then
-			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
 			MouseMove($searchResult[0],$searchResult[1],0)
 			MouseClick("left")
 			Sleep(1000)
 		EndIf 
 		
-		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_close_white.png", 10)
+		$searchResult = findImage(0, 0, @DesktopWidth, @DesktopHeight, "Badoo_close_white.png", 100)
 		If $searchResult[0] <> -1 Then
-			ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
 			MouseMove($searchResult[0],$searchResult[1],0)
 			MouseClick("left")
 			Sleep(1000)
 		EndIf 
 		
-		
-		Sleep(Random(5000,30000))
+		$i= $i+1
+		Sleep(Random(2000,2000))
 	Endif
 WEnd
 
+	;		ConsoleWrite("Using " & ": " & $searchResult[0] & ", "& $searchResult[1] & @CRLF)
 	
