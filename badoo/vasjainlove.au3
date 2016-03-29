@@ -111,8 +111,25 @@ Func CloseInvite()
 			return 
 		EndIf
 	Next
-	
 EndFunc
+
+Func CloseConnect()
+	Local $oTags = _IETagNameGetCollection($oIE, "a")
+	if @Error Then
+		MsgBox(0,"Error","in CloseConnect")
+		return
+	EndIf
+	For $oTag In $oTags
+		If $oTag.className = "dlg_pu_close_bs10" Then
+			MsgBox(0, "Connect ?", "Ok",1)
+			_IEAction($oTag, 'click')
+			Sleep(Random(2000,50000))
+			return 
+		EndIf
+	Next
+EndFunc
+
+
 
 ; 
 ;Func ClickImage()

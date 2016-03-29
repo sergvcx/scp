@@ -29,7 +29,7 @@ Func PressLike()
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					;MsgBox(0, "I Like", "I like " & $i,1)
+					MsgBox(0, "I Like", "I like #" & $i,1)
 					_IEAction($ooTag, 'click')
 				EndIf
 			Next
@@ -54,7 +54,7 @@ Func PressDisLike()
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					;MsgBox(0, "I don't Like", "I don't like " & $i,1)
+					MsgBox(0, "I don't Like", "I don't like #" & $i,1)
 					_IEAction($ooTag, 'click')
 					Sleep(1000)
 					_IEAction($ooTag, 'click')
@@ -94,54 +94,13 @@ EndFunc
  
  
  
-Func CloseInvite()
-	Local $oTags = _IETagNameGetCollection($oIE, "i")
-	if @Error Then
-		MsgBox(0,"Error","in CloseInvite")
-		return
-	EndIf
-	For $oTag In $oTags
-		If $oTag.className = "icon-svg icon-svg--white js-ovl-close" Then
-			;MsgBox(0, "Invite ?", "Fuck Off",1)
-			_IEAction($oTag, 'click')
-			Sleep(Random(2000,50000))
-			return 
-		EndIf
-	Next
-	
-EndFunc
 
-; 
-;Func ClickImage()
-;	Local $oTags = _IETagNameGetCollection($oIE, "div")
-;	if @Error Then
-;		MsgBox(0,"Error","in CloseInvite")
-;		return
-;	EndIf
-;	For $oTag In $oTags
-;		If $oTag.className = "photo-gallery__photo js-mm-photo-holder" Then
-;			Local $ooImgs = _IEImgGetCollection($oTag)
-;			For $ooImg In $ooImgs
-;				;If $ooTag.className = "js-mm-photo" Then
-;				$n = @extended
-;				MsgBox(0, "Click  ?", "on image" & $n)
-;				Sleep(1000)
-;				_IEAction($ooImg, 'click')
-;				Sleep(1000)
-;				_IEAction($ooImg, 'click')
-;				Sleep(Random(1000,2000))
-;				return 
-;				;EndIf
-;			Next
-;		EndIf
-;	Next
-;	
-;EndFunc
+
 
 Func ClickImage()
 	Local $oTags = _IETagNameGetCollection($oIE, "span")
 	if @Error Then
-		MsgBox(0,"Error","in CloseInvite")
+		MsgBox(0,"Error","in ClickImage")
 		return
 	EndIf
 	For $oTag In $oTags
@@ -153,6 +112,60 @@ Func ClickImage()
 		EndIf
 	Next
 	
+EndFunc
+
+Func CloseInvite()
+	Local $oTags = _IETagNameGetCollection($oIE, "i")
+	if @Error Then
+		MsgBox(0,"Error","in CloseInvite")
+		return
+	EndIf
+	For $oTag In $oTags
+		If $oTag.className = "icon-svg icon-svg--white js-ovl-close" Then
+		
+			Local $sHTML = _IEDocReadHTML($oIE)
+			Local $scores = _StringBetween($sHTML,'<h1>Повысьте свои шансы','!</h1>')
+			
+			if @error Then
+				return 0
+			else
+				For $score In $scores
+					MsgBox(0, "Invite ?", "Fuck Off",10)
+					_IEAction($oTag, 'click')
+					Sleep(Random(2000,50000))
+					return 
+				Next
+			EndIf
+		EndIf
+	Next
+EndFunc
+
+
+
+Func Close600()
+	Local $oTags = _IETagNameGetCollection($oIE, "i")
+	if @Error Then
+		MsgBox(0,"Error","in CloseInvite")
+		return
+	EndIf
+	For $oTag In $oTags
+		If $oTag.className = "icon-svg icon-svg--white js-ovl-close" Then
+		
+			Local $sHTML = _IEDocReadHTML($oIE)
+			Local $scores = _StringBetween($sHTML,'<h1>У вас закончились голоса','!</h1>')
+			
+			if @error Then
+				return 0
+			else
+				For $score In $scores
+					MsgBox(0, "Out of 600", "Sleep 1800 #" & $i,1800)
+					_IEAction($oTag, 'click')
+					Sleep(Random(2000,50000))
+					return 
+				Next
+			EndIf
+		EndIf
+	Next
 EndFunc
 
 ;<span class="photo-gallery__link photo-gallery__link--next js-gallery-next">
@@ -168,7 +181,8 @@ EndFunc
 While $i <= 600
 	;MsgBox(0, "counter", $i,1)
 	
-	CloseInvite()
+	;CloseInvite()
+	Close600()
 	;_IEImgClick($oIE,"//pcache-eu1.")
 	ClickImage()
 	Sleep(1000)
