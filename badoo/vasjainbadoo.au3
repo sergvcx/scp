@@ -168,6 +168,35 @@ Func Close600()
 	Next
 EndFunc
 
+Func CloseChance()
+	Local $oTags = _IETagNameGetCollection($oIE, "i")
+	if @Error Then
+		MsgBox(0,"Error","in CloseInvite")
+		return
+	EndIf
+	For $oTag In $oTags
+		If $oTag.className = "icon-svg icon-svg--white js-ovl-close" Then
+		
+			Local $sHTML = _IEDocReadHTML($oIE)
+			Local $scores = _StringBetween($sHTML,'<h1>Повысьте свои шансы','!</h1>')
+			
+			if @error Then
+				return 0
+			else
+				For $score In $scores
+					MsgBox(0, "Up your chance ", "Chance #" & $i,2)
+					_IEAction($oTag, 'click')
+					Sleep(Random(2000,50000))
+					return 
+				Next
+			EndIf
+		EndIf
+	Next
+EndFunc
+
+
+
+
 ;<span class="photo-gallery__link photo-gallery__link--next js-gallery-next">
 ;<i class="icon-svg icon-svg--white photo-gallery__arrow photo-gallery__arrow--right"><svg xmlns="http://www.w3.org/2000/svg" class="rtl-reflect icon-svg_"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#gallery-right-arrow" /></svg></i>
 ;</span>
@@ -183,6 +212,7 @@ While $i <= 600
 	
 	;CloseInvite()
 	Close600()
+	CloseChance()
 	;_IEImgClick($oIE,"//pcache-eu1.")
 	ClickImage()
 	Sleep(1000)
