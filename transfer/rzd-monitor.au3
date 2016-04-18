@@ -111,10 +111,16 @@ Func WaitForPage()
 	Next
 	
 	$founds = _StringBetween($sHTML,'<div id="Part0">'  & @CRLF  & '<div>Требуется ввести антиспам-код</div>','')
-	if @error=0 Then MsgBox(0,"Capcha",1)
+	if @error=0 Then 
+		MsgBox(0,"Capcha",1)
+		return 1
+	EndIf
 	
 	$founds = _StringBetween($sHTML,'<div id="Part0"><div>Требуется ввести антиспам-код</div>','')
-	if @error=0 Then MsgBox(0,"Capcha",2)
+	if @error=0 Then 
+		MsgBox(0,"Capcha",2)
+		return 1
+	EndIf
 		;<div id="Part0">
 		;<div>Требуется ввести антиспам-код</div>
 		;</div>
@@ -200,7 +206,7 @@ While $i <= 600
 
 	if CheckTrain("112М","Купе") Then MsgBox(0, "ура" , "Есть Купе",1);
 	
-	MsgBox(0,"Refresf in","60 sec", 60);
+	MsgBox(0,"Refresf in","300 sec", 300);
 	_IEAction($oIE, "refresh")
 	
 	$i=$i+1
