@@ -1,3 +1,13 @@
+$From = "МОСКВА"
+$To   = "КАЗАНЬ ПАСС"
+;$Date = "22.04.2016"
+$Date = "15.05.2016"
+$Train= "112М"
+$Class= "Плацкартный"
+$Login= "sergvcx"
+$Password= "sergvcxr"
+
+
 #include <IE.au3>
 #include <MsgBoxConstants.au3>
 #include <String.au3>
@@ -5,7 +15,7 @@
 
 $i = 0
 ;Local $oIE = _IE_Example("form")
-local $oIE=_IECreate("rzd.ru")
+
 
 Sleep(1000)
 
@@ -14,71 +24,147 @@ Func Terminate()
     Exit
 EndFunc
 
-Func FromToWhen($from,$to,$date)
-	Local $oInput = _IEGetObjById($oIE, "name0")
+Func InputTextByID($id,$text)
+	Local $oInput = _IEGetObjById($oIE, $id)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjById","name0",1);
-		return 0
-	Else
+		MsgBox(0, "Error in _IEGetObjById",$id,10);
+		return @error
+	EndIF
 		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
-		Local $hIE = _IEPropertyGet($oIE, "hwnd")
-		Sleep(100)
-		_IEAction($oInput, "focus")
-		Sleep(100)
-		; Select existing content so it will be overwritten.
-		_IEAction($oInput, "selectall")
-		Sleep(100)
-		ControlSend($hIE, "", "[CLASS:Internet Explorer_Server; INSTANCE:1]", $from)
-	EndIf
-	
-	Local $oInput = _IEGetObjById($oIE, "date0")
+	Local $hIE = _IEPropertyGet($oIE, "hwnd")
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjById","date0",1);
-		return 0
-	Else
-		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
-		Local $hIE = _IEPropertyGet($oIE, "hwnd")
-		Sleep(100)
-		_IEAction($oInput, "focus")
-		Sleep(100)
-		; Select existing content so it will be overwritten.
-		_IEAction($oInput, "selectall")
-		Sleep(100)
-		ControlSend($hIE, "", "[CLASS:Internet Explorer_Server; INSTANCE:1]", $date)
-	EndIf
+		MsgBox(0, "Error in _IEPropertyGet","",10);
+		return @error
+	EndIF
 	
-	Local $oInput = _IEGetObjById($oIE, "name1")
-	if @error Then
-		MsgBox(0, "Error in _IEGetObjById","name1",1);
-		return 0
-	Else
-		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
-		Local $hIE = _IEPropertyGet($oIE, "hwnd")
-		Sleep(100)
-		_IEAction($oInput, "focus")
-		Sleep(100)
-		; Select existing content so it will be overwritten.
-		_IEAction($oInput, "selectall")
-		Sleep(100)
-		ControlSend($hIE, "", "[CLASS:Internet Explorer_Server; INSTANCE:1]", $to)
-	EndIf
-	
+	Sleep(100)
+	_IEAction($oInput, "focus")
+	Sleep(100)
+	; Select existing content so it will be overwritten.
+	_IEAction($oInput, "selectall")
+	Sleep(100)
+	ControlSend($hIE, "", "[CLASS:Internet Explorer_Server; INSTANCE:1]", $text)
+	return 0
+EndFunc
 
-	
-	Local $oInput = _IEGetObjById($oIE, "Submit")
+Func InputTextByName($name,$text)
+	Local $oInput = _IEGetObjByName($oIE, $name)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjById","Submit",1);
-		return 0
-	Else
+		MsgBox(0, "Error in _IEGetObjByName",$name,10);
+		return @error
+	EndIF
 		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
-		Sleep(100)
-		_IEAction($oInput, 'click')
-		Sleep(300);
-	EndIf
+	Local $hIE = _IEPropertyGet($oIE, "hwnd")
+	if @error Then
+		MsgBox(0, "Error in _IEPropertyGet","",10);
+		return @error
+	EndIF
+	
+	Sleep(100)
+	_IEAction($oInput, "focus")
+	Sleep(100)
+	; Select existing content so it will be overwritten.
+	;_IEAction($oInput, "selectall")
+	Sleep(100)
+	ControlSend($hIE, "", "[CLASS:Internet Explorer_Server; INSTANCE:1]", $text)
+	return 0
+EndFunc
+
+
+Func SelectComboByName($name,$line)
+	Local $oInput = _IEGetObjByName($oIE, $name)
+	if @error Then
+		MsgBox(0, "Error in _IEGetObjByName",$name,10);
+		return @error
+	EndIF
+		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
+	Local $hIE = _IEPropertyGet($oIE, "hwnd")
+	if @error Then
+		MsgBox(0, "Error in _IEPropertyGet","",10);
+		return @error
+	EndIF
+	
+	Sleep(100)
+	Sleep(2000)
+	_IEAction($oInput, "focus")
+	
+	Sleep(100)
+	;Send("{DOWN}")
+	;Send("{DOWN}")
+	Sleep(2000)
+	_IEAction($oInput, "click")
+	Sleep(2000)
+	ControlSend($hIE, "Панель навигации", "[CLASS:Internet Explorer_Server; INSTANCE:1]", "Ж")
+	;ControlCommand($hIE, "Панель навигации", "[CLASS:Internet Explorer_Server; INSTANCE:1]", "ShowDropDown")
+	Sleep(2000)
+	;ControlCommand($hIE, "Панель навигации", "[CLASS:Internet Explorer_Server; INSTANCE:1]", "SelectString","Мужской")
+	return 0
+EndFunc
+
+
+
+Func InputClickByID($id)
+	Local $oInput = _IEGetObjById($oIE, $id)
+	if @error Then
+		MsgBox(0, "Error in _IEGetObjById",$id,10);
+		return @error
+	EndIF
+	_IEAction($oInput, 'click')
+	return 0
 EndFunc
 	
+Func FromToWhen($from,$to,$date)
+	InputTextByID("date0",$date)
+	InputTextByID("name0",$from)
+	InputTextByID("name1",$to)
+	InputClickByID("Submit");
+EndFunc
+
+Func ClickButton($className)
+	For $i = 10 To 1 Step -1
+		Local $oButtons = _IETagNameGetCollection($oIE, "button")
+		if @error Then 
+			MsgBox(0,"Error in _IETagNameGetCollection","button")
+			;Sleep(1000)
+			ContinueLoop
+		EndIf
+		For $oButton In $oButtons
+			if $oButton.className=$className Then
+				_IEAction($oButton, 'click')
+				return @error
+			EndIf
+		Next
+	Next
+	MsgBox(0,"Error","No button found " & $className)
+	return -1
+EndFunc
+
+
+
+Func Authorization()
+	if WaitForPage("Логин",10)==0 Then 
+		InputTextByID("j_username", $Login)
+		Sleep(1000)
+		InputTextByID("j_password", $Password)
+		Sleep(1000)
+		ClickButton("btn btn-color-grey btn-icon btn-icon-grey btn-icon-right fri")
+		return 0
+	EndIf
+	return -1
+EndFunc
 	
-Func WaitForPage()
+Func WaitForPage($keyWord,$timeout)
+	For $i = $timeout To 1 Step -1
+		Local $sHTML = _IEDocReadHTML($oIE)
+		_StringBetween($sHTML,$keyWord,'')
+		if @error=00 Then return 0
+		MsgBox(0,"Sleep","waiting for " & $keyWord & " in " &$i,1)
+	Next
+	MsgBox(0,"Timeout","Timeout off " & $keyWord )
+	return -1
+EndFunc
+	
+Func CheckCapcha()
 	Sleep(1000)
 	For $i = 10 To 1 Step -1
 		
@@ -129,10 +215,57 @@ Func WaitForPage()
 	return -1
 EndFunc
 
-Func CheckTrain($train,$controlWord)
-	
 
-		
+
+
+Func CheckRadioWagon($keyWord)
+	Local $oTRs = _IETagNameGetCollection($oIE, "tr")
+	if @error Then
+		MsgBox(0,"Error _IETagNameGetCollection","tr")
+		return -1
+	EndIf
+	For $oTR In $oTRs
+		If $oTR.className ="j-car-item trlist__trlist-row trlist__trlist-row-last-sub-item" Then 
+			Local $sHTML = _IEPropertyGet($oTR,"innertext")
+			if @error Then 
+				MsgBox(0,"Error in _IEPropertyGet","oTR");
+				return -1
+			EndIf
+			_StringBetween($sHTML,$keyWord,'')
+			if @error==0 Then
+				Local $oRadios = _IETagNameGetCollection($oTR, "input")
+				if @error Then 
+					MsgBox(0,"Error in _IETagNameGetCollection","oTR");
+					return -1
+				EndIf
+				For $oRadio In $oRadios
+					If $oRadio.type=="radio" Then
+						_IEAction($oRadio, 'click')
+						return 0
+					EndIf
+				Next
+			EndIf
+		EndIf
+	Next
+	return -1
+EndFunc
+
+Func CheckRadioTrain($trainTag)
+	Local $oInputs = _IETagNameGetCollection($trainTag, "input")
+	if @error Then
+		MsgBox(0,"Error _IETagNameGetCollection","input")
+		return
+	EndIf
+	For $oInput In $oInputs
+		If $oInput.className = "j-train-radio" Then 
+			_IEAction($oInput, 'click')
+			return 0
+		EndIf
+	Next
+	return -1
+EndFunc
+
+Func CheckTickets($train,$keyWord)
 	Local $oTags = _IETagNameGetCollection($oIE, "table")
 	if @error Then
 		MsgBox(0,"Error _IETagNameGetCollection","table")
@@ -157,8 +290,22 @@ Func CheckTrain($train,$controlWord)
 								Local $sHTML = _IEPropertyGet($ooTag,"innertext")
 								;MsgBox(0,"info",$sHTML)
 								if @error Then ExitLoop
-								_StringBetween($sHTML,$controlWord,'')
-								if @error==0 then return 1
+								_StringBetween($sHTML,$keyWord,'')
+								if @error==0 then 
+									MsgBox(0,"Sleep","Radio train",3);
+									CheckRadioTrain($ooTag)
+									MsgBox(0,"Sleep","Radio wagon",3);
+									ClickButton("btn btn-color-red btn-icon btn-icon-red btn-icon-right disabledImit")
+									MsgBox(0,"Sleep","Radio wagon",3);
+									CheckRadioWagon($Class)
+									MsgBox(0,"Sleep","Radio wagon",3);
+									ClickButton("btn btn-color-red btn-icon btn-icon-red btn-icon-right");
+									;MsgBox(0,"Sleep","Athorization",3);
+									
+									;Authorization()
+									EnterPassanger()
+									return 1
+								EndIf
 								return 0;
 							EndIf
 						EndIf
@@ -169,45 +316,62 @@ Func CheckTrain($train,$controlWord)
 	Next
 EndFunc
 			
+Func EnterPassanger()
+	if WaitForPage("Список пассажиров",10)==0 Then 
+		InputTextByName("lastName","Мушкаев")
+		InputTextByName("firstName","Сергей")
+		InputTextByName("docNumber","4509512486")
+		;SelectComboByName("gender","1")
+		InputTextByName("gender","М")
+		;InputTextByName("birthdate","31.08.1977")
+		
+		return 0
+	EndIf
+	return -1
+EndFunc
 
-							
-$From = "МОСКВА"
-$To   = "КАЗАНЬ ПАСС"
-$Date = "22.04.2016"
+
+
+local $oIE=_IECreate("rzd.ru")
+WaitForPage("Пассажирам",10) 
 FromToWhen($From, $To, $Date);
 
 While $i <= 600
 
-	$pageStatus =WaitForPage() 
-	if $pageStatus=1 Then 
-		MsgBox(0,"Error", "Ёпанная капча!");
-		_IEQuit($oIE)
-		Sleep(1000*60*15)
-		$oIE=_IECreate("rzd.ru")
-		FromToWhen($From, $To, $Date);
-		ContinueLoop
-	EndIf
+	WaitForPage("вариантов по прямому маршруту",10) 
 	
-	if $pageStatus=-1 Then 
-		MsgBox(0,"Error", "Таймаут!",10);
-		_IEQuit($oIE)
-		Sleep(1000)
-		$oIE=_IECreate("rzd.ru")
-		FromToWhen($From, $To, $Date);
-		ContinueLoop
-	EndIf
-	
-	;MsgBox(0,"Ready","Go!",2)
-	if CheckTrain("112М","Плац") Then 
-		MsgBox(0, "ура" , "Есть плацкарт",2);
+	if CheckTickets($Train,$Class) Then 
+		MsgBox(0, "ура" , "Есть " & $Class);
 	Else 
-		MsgBox(0, "Fuck" , "Нету плаца",2);
+		MsgBox(0, "Fuck" , "Нету " & $Class ,2);
 	Endif
-
-	if CheckTrain("112М","Купе") Then MsgBox(0, "ура" , "Есть Купе",1);
 	
-	MsgBox(0,"Refresf in","300 sec", 300);
+	MsgBox(0,"Refresh in","300 sec", 300);
 	_IEAction($oIE, "refresh")
 	
 	$i=$i+1
 WEnd
+
+;$pageStatus =
+;	if $pageStatus=1 Then 
+;		MsgBox(0,"Error", "Ёпанная капча!");
+;		_IEQuit($oIE)
+;		Sleep(1000*60*15)
+;		$oIE=_IECreate("rzd.ru")
+;		FromToWhen($From, $To, $Date);
+;		ContinueLoop
+;	EndIf
+;	
+;	if $pageStatus=-1 Then 
+;		MsgBox(0,"Error", "Таймаут!",10);
+;		_IEQuit($oIE)
+;		Sleep(1000)
+;		$oIE=_IECreate("rzd.ru")
+;		FromToWhen($From, $To, $Date);
+;		ContinueLoop
+;	EndIf
+;	
+;	;MsgBox(0,"Ready","Go!",2)
+;	
+;
+;	;if CheckTickets("112М","Купе") Then MsgBox(0, "ура" , "Есть Купе",1);
