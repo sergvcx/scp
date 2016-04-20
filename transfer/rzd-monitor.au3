@@ -1,23 +1,21 @@
-;$From = "МОСКВА"
-;$To   = "КАЗАНЬ ПАСС"
-$From   = "КАЗАНЬ ПАСС"
-$To 	= "МОСКВА КАЗАНСКАЯ"
-
-
-;$Date = "22.04.2016"
-$Date = "24.04.2016"
-;$Date = "15.05.2016"
-$Train= "112М"
-$Class= "Плацкартный"
-$Login= "sergvcx"
-$Password= "sergvcxr"
-
-
-
 #include <IE.au3>
 #include <MsgBoxConstants.au3>
 #include <String.au3>
 #include <Array.au3>
+
+$ini = "rzd.ini"
+$section = "path"
+$From    = IniRead ( $ini, $section, "from", "" )
+$To      = IniRead ( $ini, $section, "to", "" )
+$Date    = IniRead ( $ini, $section, "date", "" )
+$Train   = IniRead ( $ini, $section, "train", "" )
+$Class   = IniRead ( $ini, $section, "class", "" )
+$ccc     = IniRead ( $ini, $section, "ccc", "" )
+
+$section = "login"
+$Login   = IniRead ( $ini, $section, "login", "" )
+$Password= IniRead ( $ini, $section, "password", "" )
+
 
 $ini = "plastic.ini"
 $section = "hkb"
@@ -403,10 +401,7 @@ Func CheckTickets($train,$keyWord)
 											Authorization() 
 										EndIf
 										
-										if WaitForPage("Невозможно установить соединение с АСУ",2)==0 Then 
-											MsgBox(0,"WTF","Невозможно установить соединение с АСУ",10)
-											return -1000	; // restart									
-										EndIf
+										
 										
 										if WaitForPage("Список пассажиров",2)==0 Then 
 											EnterPassanger()
@@ -485,14 +480,38 @@ WaitForPage("Пассажирам",10)
 
 FromToWhen($From, $To, $Date);
 
+Func PageError()
+	Local $sHTML = _IEDocReadHTML($oIE)
+	_StringBetween($sHTML,"Невозможно установить соединение с АСУ",'')
+	if @error==0 Then 
+		MsgBox(0,"Problem in page","Невозможно установить соединение с АСУ, wait:",10)
+		return -1001	; 
+	EndIf
+	_StringBetween($sHTML,"В настоящий момент сервер не может обработать ваш запрос",'')
+	if @error==0 Then 
+		MsgBox(0,"Problem in page","В настоящий момент сервер не может обработать ваш запрос, wait:",10)
+		return -1002; 
+	EndIf
+	return 0
+EndFunc
+
 While $i <= 600
 
-	WaitForPage("вариантов по прямому маршруту",10) 
+	if WaitForPage("вариантов по прямому маршруту",15) Then 
+		MsgBox(0,"Problem", "Нет вариантов по прямому маршруту..." ,10 );
+		_IEQuit($oIE)
+		Sleep(1000*60*5)
+		$oIE=_IECreate("rzd.ru")
+		FromToWhen($From, $To, $Date);
+		ContinueLoop
+	EndIf
+	
 	
 	$status = CheckTickets($Train,$Class)
+	
+										
 	;MsgBox(0,"Shit",$status,10)
-	if $status  == -1000 Then 
-		MsgBox(0,"Shit","Невозможно установить соединение с АСУ! Restarting in 10...",10)
+	if PageError() Then 
 		_IEQuit($oIE)
 		Sleep(1000*60*5)
 		$oIE=_IECreate("rzd.ru")
