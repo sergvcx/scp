@@ -1,6 +1,11 @@
-$From = "МОСКВА"
-$To   = "КАЗАНЬ ПАСС"
-$Date = "22.04.2016"
+;$From = "МОСКВА"
+;$To   = "КАЗАНЬ ПАСС"
+$From   = "КАЗАНЬ ПАСС"
+$To 	= "МОСКВА КАЗАНСКАЯ"
+
+
+;$Date = "22.04.2016"
+$Date = "24.04.2016"
 ;$Date = "15.05.2016"
 $Train= "112М"
 $Class= "Плацкартный"
@@ -398,9 +403,9 @@ Func CheckTickets($train,$keyWord)
 											Authorization() 
 										EndIf
 										
-										if WaitForPage("Невозможно установить соединение с АСУ",2) Then 
-											MsgBox(0,"WTF","",10)
-											return -1										
+										if WaitForPage("Невозможно установить соединение с АСУ",2)==0 Then 
+											MsgBox(0,"WTF","Невозможно установить соединение с АСУ",10)
+											return -1000	; // restart									
 										EndIf
 										
 										if WaitForPage("Список пассажиров",2)==0 Then 
@@ -485,9 +490,9 @@ While $i <= 600
 	WaitForPage("вариантов по прямому маршруту",10) 
 	
 	$status = CheckTickets($Train,$Class)
-	MsgBox(0,"Shit",$status,10)
-	if $status  == -1 Then 
-		MsgBox(0,"Shit","Impossible",10)
+	;MsgBox(0,"Shit",$status,10)
+	if $status  == -1000 Then 
+		MsgBox(0,"Shit","Невозможно установить соединение с АСУ! Restarting in 10...",10)
 		_IEQuit($oIE)
 		Sleep(1000*60*5)
 		$oIE=_IECreate("rzd.ru")
