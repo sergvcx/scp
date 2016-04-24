@@ -2,7 +2,7 @@
 #include <MsgBoxConstants.au3>
 #include <String.au3>
 #include <Array.au3>
-
+#include "../msg.au3"
 $i = 0
 ;Local $oIE = _IE_Example("form")
 local $oIE=_IECreate("http://badoo.com")
@@ -17,19 +17,19 @@ EndFunc
 Func PressLike()
 	Local $oTags = _IETagNameGetCollection($oIE, "div")
 	if @error Then
-		MsgBox(0,"Error","in PressLike 1")
+		MSG("Error","in PressLike 1")
 		return
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "btn-game btn-game--hot js-profile-header-vote-yes" Then
 			Local $ooTags = _IETagNameGetCollection($oTag, "span")
 			if @error Then
-				MsgBox(0,"Error","in PressLike 2")
+				MSG("Error","in PressLike 2")
 				return
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I Like", "I like #" & $i,1)
+					MSG( "I Like", "I like #" & $i,2)
 					_IEAction($ooTag, 'click')
 				EndIf
 			Next
@@ -41,7 +41,7 @@ EndFunc
 Func PressDisLike()
 	Local $oTags = _IETagNameGetCollection($oIE, "div")
 	if @error Then
-		MsgBox(0,"Error","in PressDisLike 1")
+		MSG("Error","in PressDisLike 1")
 		return
 	EndIf
 	For $oTag In $oTags
@@ -49,12 +49,12 @@ Func PressDisLike()
 			Local $ooTags = _IETagNameGetCollection($oTag, "span")
 			
 			if @error Then
-				MsgBox(0,"Error","in PressDisLike 2" )
+				MSG("Error","in PressDisLike 2" )
 				return
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I don't Like", "I don't like #" & $i,1)
+					MSG( "I don't Like", "I don't like #" & $i,2)
 					_IEAction($ooTag, 'click')
 					Sleep(1000)
 					_IEAction($ooTag, 'click')
@@ -67,13 +67,13 @@ EndFunc
 Func GetScore()
 	Local $ooTags = _IETagNameGetCollection($oIE, "span")
 	if @error Then
-		MsgBox(0,"Error","in GetScore")
+		MSG("Error","in GetScore")
 		return
 	EndIf
 	
 	For $ooTag In $ooTags
 		If $ooTag.className = "b-link js-profile-header-toggle js-profile-header-toggle-button" Then
-			;MsgBox(0, "Click Profile", "")
+			;MSG( "Click Profile", "")
 			Sleep(1000)
 			_IEAction($ooTag, 'click')
 			Sleep(1000)
@@ -83,7 +83,7 @@ Func GetScore()
 				return 0
 			else
 				For $score In $scores
-					;MsgBox(0, "Score", $score,1)	
+					;MSG( "Score", $score,2)	
 					return number($score)
 				Next
 			EndIf
@@ -100,12 +100,12 @@ EndFunc
 Func ClickImage()
 	Local $oTags = _IETagNameGetCollection($oIE, "span")
 	if @Error Then
-		MsgBox(0,"Error","in ClickImage")
+		MSG("Error","in ClickImage")
 		return
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "photo-gallery__link photo-gallery__link--next js-gallery-next" Then
-			;MsgBox(0, "Click  ?", "on image",1)
+			;MSG( "Click  ?", "on image",2)
 			Sleep(1000)
 			_IEAction($oTag, 'click')
 			Sleep(1000)
@@ -117,7 +117,7 @@ EndFunc
 Func CloseInvite()
 	Local $oTags = _IETagNameGetCollection($oIE, "i")
 	if @Error Then
-		MsgBox(0,"Error","in CloseInvite")
+		MSG("Error","in CloseInvite")
 		return
 	EndIf
 	For $oTag In $oTags
@@ -130,7 +130,7 @@ Func CloseInvite()
 				return 0
 			else
 				For $score In $scores
-					MsgBox(0, "Invite ?", "Fuck Off",10)
+					MSG( "Invite ?", "Fuck Off",10)
 					_IEAction($oTag, 'click')
 					Sleep(Random(2000,50000))
 					return 
@@ -145,7 +145,7 @@ EndFunc
 Func Close600()
 	Local $oTags = _IETagNameGetCollection($oIE, "i")
 	if @Error Then
-		MsgBox(0,"Error","in CloseInvite")
+		MSG("Error","in CloseInvite")
 		return
 	EndIf
 	For $oTag In $oTags
@@ -158,7 +158,7 @@ Func Close600()
 				return 0
 			else
 				For $score In $scores
-					MsgBox(0, "Out of 600", "Sleep 1800 #" & $i,1800)
+					MSG( "Out of 600", "Sleep 1800 #" & $i,1800)
 					_IEAction($oTag, 'click')
 					Sleep(Random(2000,50000))
 					return 
@@ -171,7 +171,7 @@ EndFunc
 Func CloseChance()
 	Local $oTags = _IETagNameGetCollection($oIE, "i")
 	if @Error Then
-		MsgBox(0,"Error","in CloseInvite")
+		MSG("Error","in CloseInvite")
 		return
 	EndIf
 	For $oTag In $oTags
@@ -184,7 +184,7 @@ Func CloseChance()
 				return 0
 			else
 				For $score In $scores
-					MsgBox(0, "Up your chance ", "Chance #" & $i,2)
+					MSG( "Up your chance ", "Chance #" & $i,2)
 					_IEAction($oTag, 'click')
 					Sleep(Random(2000,50000))
 					return 
@@ -208,7 +208,7 @@ EndFunc
 
 
 While $i <= 600
-	;MsgBox(0, "counter", $i,1)
+	;MSG( "counter", $i,2)
 	
 	;CloseInvite()
 	Close600()

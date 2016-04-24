@@ -2,7 +2,7 @@
 #include <MsgBoxConstants.au3>
 #include <String.au3>
 #include <Array.au3>
-
+#include "../msg.au3"
 $i = 0
 ;Local $oIE = _IE_Example("form")
 local $oIE=_IECreate("https://loveplanet.ru/a-search/item-1/d-1/foto-1/p-0/pol-1/spol-2/geo-3159,4312,4400/bage-20/tage-28/gmap-1/country-3159/region-4312/city-4400/")
@@ -19,7 +19,7 @@ EndFunc
 Func PressLike()
 	Local $oTags = _IETagNameGetCollection($oIE, "a")
 	if @error Then
-		MsgBox(0,"Error","in PressLike 1")
+		MSG("Error","in PressLike 1")
 		return
 	EndIf
 	For $oTag In $oTags
@@ -27,12 +27,12 @@ Func PressLike()
 				_IEAction($oTag, 'click')
 			;Local $ooTags = _IETagNameGetCollection($oTag, "span")
 			;if @error Then
-			;	MsgBox(0,"Error","in PressLike 2")
+			;	MSG("Error","in PressLike 2")
 			;	return
 			;EndIf
 			;For $ooTag In $ooTags
 			;	If $ooTag.className = "b-link js-profile-header-vote" Then
-			;		MsgBox(0, "I Like", "I like " & $i,1)
+			;		MSG( "I Like", "I like " & $i,1)
 			;		_IEAction($ooTag, 'click')
 			;	EndIf
 			;Next
@@ -44,7 +44,7 @@ EndFunc
 Func PressDisLike()
 	Local $oTags = _IETagNameGetCollection($oIE, "div")
 	if @error Then
-		MsgBox(0,"Error","in PressDisLike 1")
+		MSG("Error","in PressDisLike 1")
 		return
 	EndIf
 	For $oTag In $oTags
@@ -52,12 +52,12 @@ Func PressDisLike()
 			Local $ooTags = _IETagNameGetCollection($oTag, "span")
 			
 			if @error Then
-				MsgBox(0,"Error","in PressDisLike 2" )
+				MSG("Error","in PressDisLike 2" )
 				return
 			EndIf
 			For $ooTag In $ooTags
 				If $ooTag.className = "b-link js-profile-header-vote" Then
-					MsgBox(0, "I don't Like", "I don't like " & $i,1)
+					MSG( "I don't Like", "I don't like " & $i,1)
 					_IEAction($ooTag, 'click')
 					Sleep(1000)
 					_IEAction($ooTag, 'click')
@@ -70,13 +70,13 @@ EndFunc
 Func GetScore()
 	Local $ooTags = _IETagNameGetCollection($oIE, "span")
 	if @error Then
-		MsgBox(0,"Error","in GetScore")
+		MSG("Error","in GetScore")
 		return
 	EndIf
 	
 	For $ooTag In $ooTags
 		If $ooTag.className = "b-link js-profile-header-toggle js-profile-header-toggle-button" Then
-			;MsgBox(0, "Click Profile", "")
+			;MSG( "Click Profile", "")
 			Sleep(1000)
 			_IEAction($ooTag, 'click')
 			Sleep(1000)
@@ -86,7 +86,7 @@ Func GetScore()
 				return 0
 			else
 				For $score In $scores
-					;MsgBox(0, "Score", $score,1)	
+					;MSG( "Score", $score,1)	
 					return number($score)
 				Next
 			EndIf
@@ -100,12 +100,12 @@ EndFunc
 Func CloseInvite()
 	Local $oTags = _IETagNameGetCollection($oIE, "i")
 	if @Error Then
-		MsgBox(0,"Error","in CloseInvite")
+		MSG("Error","in CloseInvite")
 		return
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "icon-svg icon-svg--white js-ovl-close" Then
-			MsgBox(0, "Invite ?", "Fuck Off",1)
+			MSG( "Invite ?", "Fuck Off",1)
 			_IEAction($oTag, 'click')
 			Sleep(Random(2000,50000))
 			return 
@@ -116,12 +116,12 @@ EndFunc
 Func CloseConnect()
 	Local $oTags = _IETagNameGetCollection($oIE, "a")
 	if @Error Then
-		MsgBox(0,"Error","in CloseConnect")
+		MSG("Error","in CloseConnect")
 		return
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "dlg_pu_close_bs10" Then
-			MsgBox(0, "Connect ?", "Ok",1)
+			MSG( "Connect ?", "Ok",1)
 			_IEAction($oTag, 'click')
 			Sleep(Random(2000,50000))
 			return 
@@ -135,7 +135,7 @@ EndFunc
 ;Func ClickImage()
 ;	Local $oTags = _IETagNameGetCollection($oIE, "div")
 ;	if @Error Then
-;		MsgBox(0,"Error","in CloseInvite")
+;		MSG("Error","in CloseInvite")
 ;		return
 ;	EndIf
 ;	For $oTag In $oTags
@@ -144,7 +144,7 @@ EndFunc
 ;			For $ooImg In $ooImgs
 ;				;If $ooTag.className = "js-mm-photo" Then
 ;				$n = @extended
-;				MsgBox(0, "Click  ?", "on image" & $n)
+;				MSG( "Click  ?", "on image" & $n)
 ;				Sleep(1000)
 ;				_IEAction($ooImg, 'click')
 ;				Sleep(1000)
@@ -161,12 +161,12 @@ EndFunc
 Func ClickImage()
 	Local $oTags = _IETagNameGetCollection($oIE, "span")
 	if @Error Then
-		MsgBox(0,"Error","in CloseInvite")
+		MSG("Error","in CloseInvite")
 		return
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "photo-gallery__link photo-gallery__link--next js-gallery-next" Then
-			MsgBox(0, "Click  ?", "on image",1)
+			MSG( "Click  ?", "on image",1)
 			Sleep(1000)
 			_IEAction($oTag, 'click')
 			Sleep(1000)

@@ -2,6 +2,7 @@
 #include <MsgBoxConstants.au3>
 #include <String.au3>
 #include <Array.au3>
+#include "../msg.au3"
 
 $ini = "rzd.ini"
 $section = "path"
@@ -38,16 +39,17 @@ Func Terminate()
     Exit
 EndFunc
 
+
 Func InputTextByID($id,$text)
 	Local $oInput = _IEGetObjById($oIE, $id)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjById",$id,10);
+		MSG( "Error in _IEGetObjById",$id,10);
 		return @error
 	EndIF
-		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
+		;MSG( "Found in _IEGetObjById",$oInput.placeholder);
 	Local $hIE = _IEPropertyGet($oIE, "hwnd")
 	if @error Then
-		MsgBox(0, "Error in _IEPropertyGet","",10);
+		MSG( "Error in _IEPropertyGet","",10);
 		return @error
 	EndIF
 	
@@ -64,13 +66,13 @@ EndFunc
 Func InputTextByName($name,$text)
 	Local $oInput = _IEGetObjByName($oIE, $name)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjByName",$name,10);
+		MSG( "Error in _IEGetObjByName",$name,10);
 		return @error
 	EndIF
-		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
+		;MSG( "Found in _IEGetObjById",$oInput.placeholder);
 	Local $hIE = _IEPropertyGet($oIE, "hwnd")
 	if @error Then
-		MsgBox(0, "Error in _IEPropertyGet","",10);
+		MSG( "Error in _IEPropertyGet","",10);
 		return @error
 	EndIF
 	
@@ -88,13 +90,13 @@ EndFunc
 Func SelectComboByName($name,$line)
 	Local $oInput = _IEGetObjByName($oIE, $name)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjByName",$name,10);
+		MSG( "Error in _IEGetObjByName",$name,10);
 		return @error
 	EndIF
-		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
+		;MSG( "Found in _IEGetObjById",$oInput.placeholder);
 	Local $hIE = _IEPropertyGet($oIE, "hwnd")
 	if @error Then
-		MsgBox(0, "Error in _IEPropertyGet","",10);
+		MSG( "Error in _IEPropertyGet","",10);
 		return @error
 	EndIF
 	
@@ -118,10 +120,10 @@ EndFunc
 Func DownComboByName($name,$from,$to)
 	Local $oInput = _IEGetObjByName($oIE, $name)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjByName",$name,10);
+		MSG( "Error in _IEGetObjByName",$name,10);
 		return @error
 	EndIF
-		;MsgBox(0, "Found in _IEGetObjById",$oInput.placeholder);
+		;MSG( "Found in _IEGetObjById",$oInput.placeholder);
 	
 	
 	Sleep(100)
@@ -139,7 +141,7 @@ EndFunc
 Func InputClickByID($id)
 	Local $oInput = _IEGetObjById($oIE, $id)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjById",$id,10);
+		MSG( "Error in _IEGetObjById",$id,10);
 		return @error
 	EndIF
 	_IEAction($oInput, 'click')
@@ -149,7 +151,7 @@ EndFunc
 Func InputClickByName($name)
 	Local $oInput = _IEGetObjByName($oIE, $name)
 	if @error Then
-		MsgBox(0, "Error in _IEGetObjById",$id,10);
+		MSG( "Error in _IEGetObjById",$id,10);
 		return @error
 	EndIF
 	_IEAction($oInput, 'click')
@@ -159,7 +161,7 @@ EndFunc
 Func InputClickByClass($className)
 	Local $oInputs = _IETagNameGetCollection($oIE, "input")
 	if @error Then 
-		MsgBox(0,"Error in _IETagNameGetCollection","button")
+		MSG("Error in _IETagNameGetCollection","button")
 		;Sleep(1000)
 	EndIf
 	For $oInput In $oInputs
@@ -184,7 +186,7 @@ Func ClickButtonByClass($className)
 	For $i = 10 To 1 Step -1
 		Local $oButtons = _IETagNameGetCollection($oIE, "button")
 		if @error Then 
-			MsgBox(0,"Error in _IETagNameGetCollection","button")
+			MSG("Error in _IETagNameGetCollection","button")
 			;Sleep(1000)
 			ContinueLoop
 		EndIf
@@ -196,7 +198,7 @@ Func ClickButtonByClass($className)
 		Next
 		Sleep(100)
 	Next
-	MsgBox(0,"Error","No button found " & $className)
+	MSG("Error","No button found " & $className)
 	return -1
 EndFunc
 
@@ -204,7 +206,7 @@ Func ClickButtonByType($type)
 	For $i = 10 To 1 Step -1
 		Local $oButtons = _IETagNameGetCollection($oIE, "button")
 		if @error Then 
-			MsgBox(0,"Error in _IETagNameGetCollection","button")
+			MSG("Error in _IETagNameGetCollection","button")
 			;Sleep(1000)
 			ContinueLoop
 		EndIf
@@ -216,7 +218,7 @@ Func ClickButtonByType($type)
 		Next
 		Sleep(100)
 	Next
-	MsgBox(0,"Error","No button found " & $type)
+	MSG("Error","No button found " & $type)
 	return -1
 EndFunc
 
@@ -241,9 +243,9 @@ Func WaitForPage($keyWord,$timeout)
 			
 			return 0
 		EndIf
-		MsgBox(0,"Sleep","waiting for " & $keyWord & " in " &$i,1)
+		MSG("Sleep","waiting for <" & $keyWord  & "> " & $i,2)
 	Next
-	MsgBox(0,"Timeout","Timeout off " & $keyWord ,1)
+	MSG("Timeout","Timeout off " & $keyWord ,1)
 	return -1
 EndFunc
 	
@@ -273,7 +275,7 @@ Func CheckCapcha()
 		;<div id="Part0">
 		;<div>Требуется ввести антиспам-код</div>
 		;</div>
-		;MsgBox(0,"Capcha",UBound($founds))
+		;MSG("Capcha",UBound($founds))
 		;if _ArrayMaxIndex($founds)=1 Then	return 1
 		;Endif
 		Sleep(1000)
@@ -281,13 +283,13 @@ Func CheckCapcha()
 	
 	$founds = _StringBetween($sHTML,'<div id="Part0">'  & @CRLF  & '<div>Требуется ввести антиспам-код</div>','')
 	if @error=0 Then 
-		MsgBox(0,"Capcha",1)
+		MSG("Capcha",1)
 		return 1
 	EndIf
 	
 	$founds = _StringBetween($sHTML,'<div id="Part0"><div>Требуется ввести антиспам-код</div>','')
 	if @error=0 Then 
-		MsgBox(0,"Capcha",2)
+		MSG("Capcha",2)
 		return 1
 	EndIf
 		;<div id="Part0">
@@ -304,21 +306,21 @@ EndFunc
 Func CheckRadioWagon($keyWord)
 	Local $oTRs = _IETagNameGetCollection($oIE, "tr")
 	if @error Then
-		MsgBox(0,"Error _IETagNameGetCollection","tr")
+		MSG("Error _IETagNameGetCollection","tr")
 		return -1
 	EndIf
 	For $oTR In $oTRs
 		If $oTR.className ="j-car-item trlist__trlist-row trlist__trlist-row-last-sub-item" Then 
 			Local $sHTML = _IEPropertyGet($oTR,"innertext")
 			if @error Then 
-				MsgBox(0,"Error in _IEPropertyGet","oTR");
+				MSG("Error in _IEPropertyGet","oTR");
 				return -1
 			EndIf
 			_StringBetween($sHTML,$keyWord,'')
 			if @error==0 Then
 				Local $oRadios = _IETagNameGetCollection($oTR, "input")
 				if @error Then 
-					MsgBox(0,"Error in _IETagNameGetCollection","oTR");
+					MSG("Error in _IETagNameGetCollection","oTR");
 					return -1
 				EndIf
 				For $oRadio In $oRadios
@@ -336,7 +338,7 @@ EndFunc
 Func CheckRadioTrain($trainTag)
 	Local $oInputs = _IETagNameGetCollection($trainTag, "input")
 	if @error Then
-		MsgBox(0,"Error _IETagNameGetCollection","input")
+		MSG("Error _IETagNameGetCollection","input")
 		return
 	EndIf
 	For $oInput In $oInputs
@@ -351,14 +353,14 @@ EndFunc
 Func CheckTickets($train,$keyWord)
 	Local $oTags = _IETagNameGetCollection($oIE, "table")
 	if @error Then
-		MsgBox(0,"Error _IETagNameGetCollection","table")
+		MSG("Error _IETagNameGetCollection","table")
 		return -2
 	EndIf
 	For $oTag In $oTags
 		If $oTag.className = "trlist" Then
 			Local $ooTags = _IETagNameGetCollection($oTag, "tr")
 			if @error Then
-				MsgBox(0,"Error _IETagNameGetCollection","tr" )
+				MSG("Error _IETagNameGetCollection","tr" )
 				return -3
 			EndIf
 			For $ooTag In $ooTags
@@ -366,33 +368,33 @@ Func CheckTickets($train,$keyWord)
 					Local $oooTags = _IETagNameGetCollection($ooTag, "span")
 					For $oooTag In $oooTags
 						if $oooTag.className="trlist-transf__header-trtype trlist-transf__header-trtype-0" Then
-							;MsgBox(0, "Train" , $oooTag.title)
+							;MSG( "Train" , $oooTag.title)
 							Local $trainIDs =_StringBetween($oooTag.title,'Поезд дальнего следования № ','')
 							if @error Then ExitLoop
 							if $trainIDs[0]= $train Then
 								Local $sHTML = _IEPropertyGet($ooTag,"innertext")
-								;MsgBox(0,"info",$sHTML)
+								;MSG("info",$sHTML)
 								if @error Then ExitLoop
 								_StringBetween($sHTML,$keyWord,'')
 								if @error==0 then 
-									;MsgBox(0,"Sleep","Radio train",3);
-									if WaitForPage("Не выбран поезд",10) Then MsgBox(0,"Fuck","")
+									;MSG("Sleep","Radio train",3);
+									if WaitForPage("Не выбран поезд",10) Then MSG("Fuck","")
 									Sleep(1000)
-									if CheckRadioTrain($ooTag) Then MsgBox(0,"Fuck of train select","")
+									if CheckRadioTrain($ooTag) Then MSG("Fuck of train select","")
 									Sleep(1000)
-									;MsgBox(0,"Sleep","Radio wagon",3);
+									;MSG("Sleep","Radio wagon",3);
 									ClickButtonByClass("btn btn-color-red btn-icon btn-icon-red btn-icon-right disabledImit")
-									;MsgBox(0,"Sleep","Radio wagon",3);
+									;MSG("Sleep","Radio wagon",3);
 									;_IELoadWait($oIE)
 									Sleep(1000)
-									if WaitForPage("<span>МЖ",10) Then MsgBox(0,"Fuck","2")
+									if WaitForPage("<span>МЖ",10) Then MSG("Fuck","2")
 									
 									Sleep(2000)
-									if CheckRadioWagon($Class) Then MsgBox(0,"Fuck of wagon select","")
+									if CheckRadioWagon($Class) Then MSG("Fuck of wagon select","")
 									Sleep(1000)
-									;MsgBox(0,"Sleep","Radio wagon",3);
+									;MSG("Sleep","Radio wagon",3);
 									ClickButtonByClass("btn btn-color-red btn-icon btn-icon-red btn-icon-right");
-									;MsgBox(0,"Sleep","Athorization",3);
+									;MSG("Sleep","Athorization",3);
 									
 									
 									For $i = 10 To 1 Step -1 
@@ -408,13 +410,13 @@ Func CheckTickets($train,$keyWord)
 											Sleep(1000)
 											ClickButtonByClass("btn btn-color-red btn-icon btn-icon-right btn-icon-red")
 											
-											if WaitForPage("Сумма к оплате",10) Then MsgBox(0,"Shit","Сумма к оплате")
+											if WaitForPage("Сумма к оплате",10) Then MSG("Shit","Сумма к оплате")
 											Sleep(1000)
 											InputClickByClass("fle marR15")
 											Sleep(1000)
 											ClickButtonByClass("btn btn-color-red btn-icon btn-icon-red btn-icon-right")
 											
-											if WaitForPage("Оплата банковской картой",10) Then MsgBox(0,"Shit","Оплата банковской картой")
+											if WaitForPage("Оплата банковской картой",10) Then MSG("Shit","Оплата банковской картой")
 											
 											InputTextByName("pan",$card)
 											Sleep(1000)
@@ -435,7 +437,7 @@ Func CheckTickets($train,$keyWord)
 										
 										
 											
-										MsgBox(0,"Sleep", "Waiting for page ..." & $i , 1)
+										MSG("Sleep", "Waiting for page ..." & $i , 1)
 									Next
 									
 									
@@ -456,7 +458,7 @@ Func EnterPassanger()
 	if WaitForPage("Список пассажиров",10)==0 Then 
 		;Sleep(1000)
 		;$oGender= _IEFormElementGetObjByName($oIE,"gender")
-		;if @error then MsgBox(0,"no gender" , @error);
+		;if @error then MSG("no gender" , @error);
 		;_IEFormElementCheckBoxSelect($oGender,"Мужской")
 		
 		InputTextByName("birthdate","31.08.1977")
@@ -484,21 +486,22 @@ Func PageError()
 	Local $sHTML = _IEDocReadHTML($oIE)
 	_StringBetween($sHTML,"Невозможно установить соединение с АСУ",'')
 	if @error==0 Then 
-		MsgBox(0,"Problem in page","Невозможно установить соединение с АСУ, wait:",10)
+		MSG("Problem in page","Невозможно установить соединение с АСУ, wait:",10)
 		return -1001	; 
 	EndIf
 	_StringBetween($sHTML,"В настоящий момент сервер не может обработать ваш запрос",'')
 	if @error==0 Then 
-		MsgBox(0,"Problem in page","В настоящий момент сервер не может обработать ваш запрос, wait:",10)
+		MSG("Problem in page","В настоящий момент сервер не может обработать ваш запрос, wait:",10)
 		return -1002; 
 	EndIf
 	return 0
 EndFunc
 
+
 While $i <= 600
 
 	if WaitForPage("вариантов по прямому маршруту",15) Then 
-		MsgBox(0,"Problem", "Нет вариантов по прямому маршруту..." ,10 );
+		MSG("Problem", "Нет вариантов по прямому маршруту..." ,10 );
 		_IEQuit($oIE)
 		Sleep(1000*60*5)
 		$oIE=_IECreate("rzd.ru")
@@ -510,7 +513,7 @@ While $i <= 600
 	$status = CheckTickets($Train,$Class)
 	
 										
-	;MsgBox(0,"Shit",$status,10)
+	;MSG("Shit",$status,10)
 	if PageError() Then 
 		_IEQuit($oIE)
 		Sleep(1000*60*5)
@@ -520,12 +523,12 @@ While $i <= 600
 	EndIf
 				
 	if $status ==0 Then
-		MsgBox(0, "ура" , "Есть " & $Class);
+		MSG( "ура" , "Есть " & $Class);
 	Else 
-		MsgBox(0, "Fuck" , "Нету " & $Class ,2);
+		MSG( "Fuck" , "Нету " & $Class ,2);
 	Endif
 	
-	MsgBox(0,"Refresh in","200 sec", 200);
+	MSG("Refresh","Sleep...", 200);
 	_IEAction($oIE, "refresh")
 	
 	$i=$i+1
@@ -533,7 +536,7 @@ WEnd
 
 ;$pageStatus =
 ;	if $pageStatus=1 Then 
-;		MsgBox(0,"Error", "Ёпанная капча!");
+;		MSG("Error", "Ёпанная капча!");
 ;		_IEQuit($oIE)
 ;		Sleep(1000*60*15)
 ;		$oIE=_IECreate("rzd.ru")
@@ -542,7 +545,7 @@ WEnd
 ;	EndIf
 ;	
 ;	if $pageStatus=-1 Then 
-;		MsgBox(0,"Error", "Таймаут!",10);
+;		MSG("Error", "Таймаут!",10);
 ;		_IEQuit($oIE)
 ;		Sleep(1000)
 ;		$oIE=_IECreate("rzd.ru")
@@ -550,7 +553,7 @@ WEnd
 ;		ContinueLoop
 ;	EndIf
 ;	
-;	;MsgBox(0,"Ready","Go!",2)
+;	;MSG("Ready","Go!",2)
 ;	
 ;
-;	;if CheckTickets("112М","Купе") Then MsgBox(0, "ура" , "Есть Купе",1);
+;	;if CheckTickets("112М","Купе") Then MSG( "ура" , "Есть Купе",1);
