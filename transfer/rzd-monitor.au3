@@ -3,6 +3,7 @@
 #include <String.au3>
 #include <Array.au3>
 #include "../msg.au3"
+#include "../myie.au3"
 
 $ini = "rzd.ini"
 $section = "path"
@@ -158,69 +159,37 @@ Func InputClickByName($name)
 	return 0
 EndFunc
 
-Func InputClickByClass($className)
-	Local $oInputs = _IETagNameGetCollection($oIE, "input")
-	if @error Then 
-		MSG("Error in _IETagNameGetCollection","button")
-		;Sleep(1000)
-	EndIf
-	For $oInput In $oInputs
-		if $oInput.className=$className Then
-			_IEAction($oInput, 'click')
-			return @error
-		EndIf
-	Next
-	return -1
-EndFunc
+;Func InputClickByClass($className)
+;	Local $oInputs = _IETagNameGetCollection($oIE, "input")
+;	if @error Then 
+;		MSG("Error in _IETagNameGetCollection","button")
+;		;Sleep(1000)
+;	EndIf
+;	For $oInput In $oInputs
+;		if $oInput.className=$className Then
+;			_IEAction($oInput, 'click')
+;			return @error
+;		EndIf
+;	Next
+;	return -1
+;EndFunc
 
 
 	
 Func FromToWhen($from,$to,$date)
 	InputTextByID("date0",$date)
+	Sleep(1000)
 	InputTextByID("name0",$from)
+	Sleep(1000)
 	InputTextByID("name1",$to)
+	Sleep(1000)
 	InputClickByID("Submit");
+	Sleep(1000)
 EndFunc
 
-Func ClickButtonByClass($className)
-	For $i = 10 To 1 Step -1
-		Local $oButtons = _IETagNameGetCollection($oIE, "button")
-		if @error Then 
-			MSG("Error in _IETagNameGetCollection","button")
-			;Sleep(1000)
-			ContinueLoop
-		EndIf
-		For $oButton In $oButtons
-			if $oButton.className=$className Then
-				_IEAction($oButton, 'click')
-				return @error
-			EndIf
-		Next
-		Sleep(100)
-	Next
-	MSG("Error","No button found " & $className)
-	return -1
-EndFunc
 
-Func ClickButtonByType($type)
-	For $i = 10 To 1 Step -1
-		Local $oButtons = _IETagNameGetCollection($oIE, "button")
-		if @error Then 
-			MSG("Error in _IETagNameGetCollection","button")
-			;Sleep(1000)
-			ContinueLoop
-		EndIf
-		For $oButton In $oButtons
-			if $oButton.type=$type Then
-				_IEAction($oButton, 'click')
-				return @error
-			EndIf
-		Next
-		Sleep(100)
-	Next
-	MSG("Error","No button found " & $type)
-	return -1
-EndFunc
+
+
 
 
 Func Authorization()
@@ -350,7 +319,101 @@ Func CheckRadioTrain($trainTag)
 	return -1
 EndFunc
 
-Func CheckTickets($train,$keyWord)
+Func CheckTickets($trainNumber,$trainClass)
+	Local $oTags = GetTagCollectionByClass($oIE, "table","trlist")
+	For   $oTag In $oTags
+		MSG("Found","table" &"trlist", 2);
+		Local $oTrains = GetTagCollectionByClass($oTag, "tr","trlist__trlist-row trslot ")
+		For   $oTrain In $oTrains
+			MSG("Found","tr trlist__trlist-row trslot ", 2); Нашли какой то поезд 
+			
+			; Проверяем номер поезда
+			$oTrainNumber=GetTagByClass($oTrain,"div","trlist__cell-pointdata__tr-num train-num-0")
+			if @error Then ContinueLoop
+			if not textInTag($oTrainNumber,$trainNumber) Then ContinueLoop
+			
+			MSG("Found","поезд "& $trainNumber, 2); Нашли какой то поезд 
+			
+			; Проверяем наличие мест
+			$oTrainClass=GetTagByClass($oTrain,"table","trlist__table-price")
+			if @error Then ContinueLoop
+			
+			if not textInTag($oTrainNumber,$trainClass) Then ContinueLoop
+			
+			MSG("Found","место"& $trainClass, 2); Нашли какой то поезд 
+			
+			MSG("Yes","Нашли поезд",10)
+			; выбираем поезд
+			$trainRadio = GetTagByClass($oTrain,"input","j-train-radio",10)
+			if @error Then ContinueLoop
+			_IEAction($trainRadio,"click")
+			
+			;if @error==0 then  ; Нашли тип 
+			;MSG("Sleep","Radio train",3);
+			;			if WaitForPage("Не выбран поезд",10) Then MSG("Fuck","")
+			;			Sleep(1000)
+			;			if CheckRadioTrain($ooTag) Then MSG("Fuck of train select","")
+			;			Sleep(1000)
+						;MSG("Sleep","Radio wagon",3);
+			
+			; Жмем продолжить 
+			$buttonContinue = GetTagByClass($oIE,"button","btn btn-color-red btn-icon btn-icon-red btn-icon-right disabledImit",10)
+			if @error Then ContinueLoop
+			_IEAction($buttonContinue,"click")
+			
+			;выбираем вагон
+			$oWagons = GetTagCollectionByClass($oIE,"tr","j-car-item trlist__trlist-row trlist__trlist-row-last-sub-item",10)
+			if @error Then ContinueLoop
+			
+			for $oWagon in $Wagons 
+				$type=GetTagByClass($oWagon,"trlist_cell-pointdata")
+				if @error Then ContinueLoop
+				if not textInTag($type,$trainClass) Then ContinueLoop
+				
+				;жмем клик
+				$wagonRadio=GetTagByType($oWagon,"input","radio",10)
+				if @error Then ContinueLoop
+				_IEAction($wagonRadio,"click")	
+				if @error Then ContinueLoop
+				
+				Local $buttonContinue= GetTagByClass($oIE,"button","btn btn-color-red btn-icon btn-icon-red btn-icon-right")
+				if @error Then ContinueLoop
+				_IEAction($buttonContinue,"click")	
+				if @error Then ContinueLoop
+				
+				; оплата
+				if WaitForPage("Сумма к оплате",10) Then 
+					MSG("Shit","Сумма к оплате")
+					Sleep(1000)
+					ClickTagByClass($oIE,"input","fle marR15")
+					Sleep(1000)
+					;ClickButtonByClass("btn btn-color-red btn-icon btn-icon-red btn-icon-right")
+					ClickTagByClass($oIE,"button","btn btn-color-red btn-icon btn-icon-red btn-icon-right")
+					
+					if WaitForPage("Оплата банковской картой",10) Then MSG("Shit","Оплата банковской картой")
+					
+					InputTextByName("pan",$card)
+					Sleep(1000)
+					InputTextByName("cvv2",$ccc)
+					Sleep(1000)
+					InputTextByName("fio",$name & " " & $surname)
+					WinActivate ("TW")
+					Sleep(1000)
+					DownComboByName("expMon",1,$month)
+					Sleep(1000)
+					DownComboByName("ExpYear",16,$year)
+					Sleep(1000)
+					ClickButtonByType("submit")
+				EndIF
+			Next 
+			MSG("Error","Не найдено поезда "& $trainNumber &trainClass )
+		Next
+	Next
+	return -1
+EndFunc
+
+
+Func CheckTickets2($train,$keyWord)
 	Local $oTags = _IETagNameGetCollection($oIE, "table")
 	if @error Then
 		MSG("Error _IETagNameGetCollection","table")
@@ -412,9 +475,10 @@ Func CheckTickets($train,$keyWord)
 											
 											if WaitForPage("Сумма к оплате",10) Then MSG("Shit","Сумма к оплате")
 											Sleep(1000)
-											InputClickByClass("fle marR15")
+											ClickTagByClass($oIE,"input","fle marR15")
 											Sleep(1000)
-											ClickButtonByClass("btn btn-color-red btn-icon btn-icon-red btn-icon-right")
+											;ClickButtonByClass("btn btn-color-red btn-icon btn-icon-red btn-icon-right")
+											ClickTagByClass($oIE,"button","btn btn-color-red btn-icon btn-icon-red btn-icon-right")
 											
 											if WaitForPage("Оплата банковской картой",10) Then MSG("Shit","Оплата банковской картой")
 											
@@ -484,16 +548,27 @@ FromToWhen($From, $To, $Date);
 
 Func PageError()
 	Local $sHTML = _IEDocReadHTML($oIE)
+	
+	
+	
 	_StringBetween($sHTML,"Невозможно установить соединение с АСУ",'')
 	if @error==0 Then 
 		MSG("Problem in page","Невозможно установить соединение с АСУ, wait:",10)
 		return -1001	; 
 	EndIf
+	
 	_StringBetween($sHTML,"В настоящий момент сервер не может обработать ваш запрос",'')
 	if @error==0 Then 
 		MSG("Problem in page","В настоящий момент сервер не может обработать ваш запрос, wait:",10)
 		return -1002; 
 	EndIf
+	
+	_StringBetween($sHTML,"Произошла системная ошибка",'')
+	if @error==0 Then 
+		MSG("Problem in page","Невозможно установить соединение с АСУ, wait:",10)
+		return -1003	; 
+	EndIf
+	
 	return 0
 EndFunc
 

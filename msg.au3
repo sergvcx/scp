@@ -1,4 +1,4 @@
-Local $showMsgBox = 1
+$showMsgBox = 1
 Func MSG($title,$message,$timeout=0)
 	if $showMsgBox Then
 		Local $timeoutMsg ="" 
