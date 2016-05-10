@@ -6,10 +6,10 @@ Func sizeOf($array)
 	return $size
 EndFunc
 
-Func GetTagCollectionByClass($tag,$className,$timeout=0)
+Func GetTagCollectionByClass($tag,$className,$timeout)
 	
 	$tagString = "<" &$tag & " class='" &$className & "'>"
-	;MSG("GetTagCollectionByClass",$tagString )
+	MSG("GetTagCollectionByClass",$tagString ,2)
 	Local $tagsFiltered[0]
 	Local $ready= 0
 	For $i = $timeout To 0 Step -1
@@ -97,8 +97,22 @@ Func GetTagCollectionByTypeIn($doc,$tag,$type,$timeout=0)
 EndFunc
 
 
+;Func TagHasText($tag,$text)
+;	Local $sHTML = _IEPropertyGet($tag,"innertext")
+;	Local $between=_StringBetween($sHTML,$text,'')
+;	Local $count=0
+;	while @error=0
+;		$count = $count+1
+;		$between=_StringBetween($between[0],$text,'')
+;	WEnd 
+;	return $count;
+;EndFunc
+
+
 Func TagHasText($tag,$text)
-	Local $sHTML = _IEPropertyGet($tag,"innertext")
+	;Local $sHTML = _IEPropertyGet($tag,"innertext")
+	Local $sHTML = _IEDocReadHTML($tag)
+	
 	Local $between=_StringBetween($sHTML,$text,'')
 	Local $count=0
 	while @error=0
@@ -107,6 +121,7 @@ Func TagHasText($tag,$text)
 	WEnd 
 	return $count;
 EndFunc
+
 
 Func GetTagText($tag)
 	Local $sHTML = _IEPropertyGet($tag,"innertext")

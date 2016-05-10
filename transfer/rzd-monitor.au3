@@ -320,31 +320,34 @@ Func CheckRadioTrain($trainTag)
 EndFunc
 
 Func CheckTickets($trainNumber,$trainClass)
-	Local $oTags = GetTagCollectionByClass($oIE, "table","trlist")
+	MSG("Info ","I am in CheckTickets", 2);
+	Local $oTags = GetTagCollectionByClass("table","trlist",0)
+	if (@error) then MSG("WTF",@error)
+		
 	For   $oTag In $oTags
 		MSG("Found","table" &"trlist", 2);
-		Local $oTrains = GetTagCollectionByClass($oTag, "tr","trlist__trlist-row trslot ")
+		Local $oTrains = GetTagCollectionByClassIn($oTag, "tr","trlist__trlist-row trslot ")
 		For   $oTrain In $oTrains
 			MSG("Found","tr trlist__trlist-row trslot ", 2); Нашли какой то поезд 
 			
 			; Проверяем номер поезда
-			$oTrainNumber=GetTagByClass($oTrain,"div","trlist__cell-pointdata__tr-num train-num-0")
+			$oTrainNumber=GetTagByClassIn($oTrain,"div","trlist__cell-pointdata__tr-num train-num-0")
 			if @error Then ContinueLoop
-			if not textInTag($oTrainNumber,$trainNumber) Then ContinueLoop
+			if not TagHasText($oTrainNumber,$trainNumber) Then ContinueLoop
 			
 			MSG("Found","поезд "& $trainNumber, 2); Нашли какой то поезд 
 			
 			; Проверяем наличие мест
-			$oTrainClass=GetTagByClass($oTrain,"table","trlist__table-price")
+			$oTrainClass=GetTagByClassIn($oTrain,"table","trlist__table-price")
 			if @error Then ContinueLoop
 			
-			if not textInTag($oTrainNumber,$trainClass) Then ContinueLoop
+			if not TagHasText($oTrainNumber,$trainClass) Then ContinueLoop
 			
 			MSG("Found","место"& $trainClass, 2); Нашли какой то поезд 
 			
 			MSG("Yes","Нашли поезд",10)
 			; выбираем поезд
-			$trainRadio = GetTagByClass($oTrain,"input","j-train-radio",10)
+			$trainRadio = GetTagByClassIn($oTrain,"input","j-train-radio",10)
 			if @error Then ContinueLoop
 			_IEAction($trainRadio,"click")
 			
@@ -357,18 +360,18 @@ Func CheckTickets($trainNumber,$trainClass)
 						;MSG("Sleep","Radio wagon",3);
 			
 			; Жмем продолжить 
-			$buttonContinue = GetTagByClass($oIE,"button","btn btn-color-red btn-icon btn-icon-red btn-icon-right disabledImit",10)
+			$buttonContinue = GetTagByClass("button","btn btn-color-red btn-icon btn-icon-red btn-icon-right disabledImit",10)
 			if @error Then ContinueLoop
 			_IEAction($buttonContinue,"click")
 			
 			;выбираем вагон
-			$oWagons = GetTagCollectionByClass($oIE,"tr","j-car-item trlist__trlist-row trlist__trlist-row-last-sub-item",10)
+			$oWagons = GetTagCollectionByClass("tr","j-car-item trlist__trlist-row trlist__trlist-row-last-sub-item",10)
 			if @error Then ContinueLoop
 			
-			for $oWagon in $Wagons 
-				$type=GetTagByClass($oWagon,"trlist_cell-pointdata")
+			for $oWagon in $oWagons 
+				$type=GetTagByClassIn($oWagon,"td","trlist_cell-pointdata")
 				if @error Then ContinueLoop
-				if not textInTag($type,$trainClass) Then ContinueLoop
+				if not TagHasText($type,$trainClass) Then ContinueLoop
 				
 				;жмем клик
 				$wagonRadio=GetTagByType($oWagon,"input","radio",10)
@@ -376,7 +379,7 @@ Func CheckTickets($trainNumber,$trainClass)
 				_IEAction($wagonRadio,"click")	
 				if @error Then ContinueLoop
 				
-				Local $buttonContinue= GetTagByClass($oIE,"button","btn btn-color-red btn-icon btn-icon-red btn-icon-right")
+				Local $buttonContinue= GetTagByClass("button","btn btn-color-red btn-icon btn-icon-red btn-icon-right")
 				if @error Then ContinueLoop
 				_IEAction($buttonContinue,"click")	
 				if @error Then ContinueLoop
@@ -385,10 +388,10 @@ Func CheckTickets($trainNumber,$trainClass)
 				if WaitForPage("Сумма к оплате",10) Then 
 					MSG("Shit","Сумма к оплате")
 					Sleep(1000)
-					ClickTagByClass($oIE,"input","fle marR15")
+					ClickTagByClass("input","fle marR15")
 					Sleep(1000)
 					;ClickButtonByClass("btn btn-color-red btn-icon btn-icon-red btn-icon-right")
-					ClickTagByClass($oIE,"button","btn btn-color-red btn-icon btn-icon-red btn-icon-right")
+					ClickTagByClass("button","btn btn-color-red btn-icon btn-icon-red btn-icon-right")
 					
 					if WaitForPage("Оплата банковской картой",10) Then MSG("Shit","Оплата банковской картой")
 					
