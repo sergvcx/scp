@@ -8,10 +8,7 @@ Endif
 #include <MsgBoxConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <MsgBoxConstants.au3>
-
-
-#include <GUIConstantsEx.au3>
-#include <MsgBoxConstants.au3>
+#include <Clipboard.au3>
 #include "keyboard.au3"
 
 ;Example()
@@ -79,7 +76,8 @@ $birthday  = IniRead ( $ini, $section, "birthday", "" )
 $bonus     = IniRead ( $ini, $section, "bonus", "" )
 
 
-	
+
+_ClipBoard_SetData($bonus)	
 
 ;MsgBox($MB_SYSTEMMODAL, "", "name is: " & $RU)
 ;exit 
