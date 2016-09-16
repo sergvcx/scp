@@ -41,7 +41,7 @@ casper.then(function() {
 	this.waitForSelector('form', function(){
 		this.fill('form', {
 			'login': 'sergvcx@mail.ru', 
-			'password': 'hifly1'},
+			'password': ''},
 			true);
 	});
 		
@@ -65,6 +65,9 @@ casper.then(function() {
 });	
 
 casper.then(function() {
+	
+	body > div.height_full > div.head > div > ul > li:nth-child(1) > a
+	
 	this.echo('preexit');
 	this.wait(5000,function(){
 		this.echo('exit');
