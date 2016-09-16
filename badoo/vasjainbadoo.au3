@@ -13,7 +13,7 @@ $showMsgBox=1
 
 Sleep(2000)
 
-HotKeySet("{ESC}", "Terminate")
+;HotKeySet("{ESC}", "Terminate")
 Func Terminate()
     Exit
 EndFunc
@@ -173,7 +173,7 @@ EndFunc
  	
 
 While 1
-	MSG("Sleep","Zzzzz...",5);
+	MSG("Sleep","Zzzzz...",150);
 	
 	IfSpam();
 	If600()

@@ -9,7 +9,7 @@ local $oIE=_IECreate("https://loveplanet.ru/a-search/item-1/d-1/foto-1/p-0/pol-1
 
 Sleep(2000)
 
-HotKeySet("{ESC}", "Terminate")
+;HotKeySet("{ESC}", "Terminate")
 Func Terminate()
     Exit
 EndFunc
