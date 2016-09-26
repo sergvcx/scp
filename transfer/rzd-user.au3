@@ -103,10 +103,16 @@ Send("{TAB}")
 Sleep(200)
 Send($middlename)
 Send("{TAB}") 
-Sleep(200)
-Send("{TAB}") 
-Sleep(200)
+
+Sleep(100)
+Send($birthday) 
+Sleep(100)
+Send("{ENTER}")
 Send("{TAB}")
+Send("{TAB}")
+Send("{TAB}")
+Send("{TAB}")
+
 
 Sleep(100)
 Send($passport)
@@ -124,11 +130,6 @@ Send("{TAB}")
 Send("{TAB}")
 
 
-Sleep(100)
-Send($birthday) 
-Sleep(100)
-Send("{TAB}")
-Send("{ENTER}")
 
 Sleep(1000)
 ;WinGetActiveStats, getTitle, width, height, x, y
