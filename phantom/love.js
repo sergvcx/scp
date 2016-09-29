@@ -1,5 +1,7 @@
+phantom.injectJs('settings.js');
 var casper = require('casper').create();
 
+//this.userAgent('Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)');
 casper.start('http://loveplanet.ru', function() {
 	phantom.outputEncoding="cp866";
     this.echo(this.getTitle());
@@ -40,8 +42,8 @@ casper.then(function() {
 	//this.echo('I am out of selector');
 	this.waitForSelector('form', function(){
 		this.fill('form', {
-			'login': 'sergvcx@mail.ru', 
-			'password': ''},
+			'login': email, 
+			'password': password},
 			true);
 	});
 		
@@ -66,12 +68,83 @@ casper.then(function() {
 
 casper.then(function() {
 	
-	body > div.height_full > div.head > div > ul > li:nth-child(1) > a
+	//body > div.height_full > div.head > div > ul > li:nth-child(1) > a
 	
 	this.echo('preexit');
-	this.wait(5000,function(){
+	//this.wait(5000,function(){
+	//	this.echo('exit');
+	//	this.capture('love-30.png');
+	//});
+	this.waitForSelector('div.height_full', function(){
 		this.echo('exit');
 		this.capture('love-30.png');
+	});
+	
+
+});	
+
+casper.then(function() {
+	this.capture('love-40.png');
+	this.click('a.hm_icon');
+	this.capture('love-41.png');
+});
+
+casper.then(function() {
+//	this.capture('love-50.png');
+	//for(var i=1; i<=5; i++){    
+	var numTimes = 500, count = 501;
+
+	this.repeat(numTimes, function() {
+		//this.thenEvaluate(function(count) {
+		//	nextPage(count);
+		//}, ++count);
+		this.wait(2000,function(){
+			this.echo('I like '+count);
+			this.waitForSelector('a.gbut_grd_green.gnl_but36.w190', function(){
+				this.click('a.gbut_grd_green.gnl_but36.w190');
+			});
+			
+			this.capture('love='+count+'.png');
+			++count;
+		});
+
+		
+		
+	});
+	
+});
+
+
+
+//casper.then(function() {
+//	this.capture('love-50.png');
+//	this.waitForSelector('a.gbut_grd_green.gnl_but36.w190', function(){
+//		this.echo('I like it');
+//		this.click('a.gbut_grd_green.gnl_but36.w190');
+//		this.capture('love-51.png');
+//	});
+//	
+//	
+//});
+//
+//casper.then(function() {
+//	this.capture('love-60.png');
+//	this.waitForSelector('a.gbut_grd_green.gnl_but36.w190', function(){
+//		this.echo('I like it');
+//		this.click('a.gbut_grd_green.gnl_but36.w190');
+//		this.capture('love-61.png');
+//	});
+//});
+
+
+casper.then(function() {
+	
+	//body > div.height_full > div.head > div > ul > li:nth-child(1) > a
+	
+	this.echo('prefinal');
+	this.wait(5000,function(){
+		this.echo('final');
+		this.capture('love-99.png');
 	});
 
 });	
