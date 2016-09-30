@@ -1,5 +1,6 @@
 phantom.injectJs('settings.js');
 var casper = require('casper').create();
+var fs = require('fs');
 casper.userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X)');
 //casper.userAgent('Mozilla/6.0 (compatible; MSIE 6.0; Windows NT 5.1)');
 casper.start('http://badoo.com', function() {
@@ -108,92 +109,112 @@ casper.then(function() {
 				//if (this.exists('div.ovl-frame.js-ovl-wrap')){
 				//<html lang="ru" dir="ltr" class="js chrome ovl-fading ovl-opened">
 				//<div class="ovl-frame js-ovl-wrap">
-		this.waitForSelector('div.ovl-frame.js-ovl-wrap', 
-			function(){
-				this.echo('Overlay detected='+count);	
-				this.capture('Overlay='+count+'.png');
-				//this.waitWhileVisible('div.ovl-frame.js-ovl-wrap', 
-				
-				this.waitForSelector('span.p-link.js-ovl-close', 
-					function(){
-						this.echo('span.p-link.js-ovl-close SELECTOR='+count);	
-						if (this.exists(x('//span[text()="Нет, спасибо"]'))) {
-							this.echo('Нет, спасибо='+count);	
-							this.click('span.p-link.js-ovl-close');
-						}
-					},
-					function() {
-						//this.echo('No 3000='+count);
-					},
-					3000
-				);
-				
-				// <i class="icon icon--white js-ovl-close">  [Close icon]
-				this.waitForSelector('i.icon.icon--white.js-ovl-close', 
-					function () {
-						this.echo('i.icon.icon--white.js-ovl-close SELECTOR='+count);	
-						if (this.exists(x('//p[text()="У вас закончились голоса. Хотите проголосовать ещё 600 раз сегодня?"]'))) {
-							this.echo('У вас закончились голоса='+count);	
-							this.echo('ZZZzzzzz....10 min');	
-							novoice=true;
-							this.wait(60000,
-								function(){	
-									this.click('i.icon.icon--white.js-ovl-close');
-								}
-							);
-						}
-						// <h1>Повысьте свои шансы!</h1>
-						else if (this.exists(x('//h1[text()="Повысьте свои шансы!"]'))) {
-							this.echo('Повысьте свои шансы! ='+count);	
-							this.click('i.icon.icon--white.js-ovl-close');
-						}
-						else if (this.exists(x('//h1[text()="Нравится Badoo?"]'))) {
-							this.capture('Nra='+count+'.png');
-							this.echo('Нравится Badoo! ='+count);	
-							this.click('i.icon.icon--white.js-ovl-close');
-						}
-						else {
-							this.capture('Hren='+count+'.png');
-							this.echo('У вас какая то хрень='+count);
-							this.click('i.icon.icon--white.js-ovl-close');
-						}
-					},
-					function() {
-						this.echo('No 3001='+count);
-					},
-					3001
-				);
-				
-				this.waitWhileVisible('div.ovl-frame.js-ovl-wrap',
-					function() {
-						this.echo('Overlay Disapeared='+count);
-						//this.capture('badoO='+count+'.png');
-						//this.echo('I like '+count);
-						//this.click('span.b-link.js-profile-header-vote');
-						//++count;
-					},
-					function() {
-						this.echo('PROMBLEM: Overlay dows not disapeared!',+count);
-						this.capture('Error='+count+'.png');
-					},
-					10000
-				);
-			}, 
-			function() {
-				this.waitForSelector('span.b-link.js-profile-header-vote', function() {
-					if (novoice==false) {
-						this.echo('I like '+count);
-						this.capture('badoo='+count+'.png');
-						++count;
+		this.echo('-----------');
+		this.echo('count='+count);
+		//if (!this.exists('div.ovl-frame.js-ovl-wrap')){
+		if (!this.exists('html.js.safari.ovl-fading')){
+			//if (novoice==false) {
+			this.echo('I like '+count);
+			this.capture('badoo='+count+'.png');
+			var fname = 'page='+count+'.html';
+			fs.write(fname, this.getHTML() , 'w');
+				//++count;
+			//}
+			//this.echo('I Click yes whitout capture'+count);
+			
+			//novoice=false;
+		}//}
+		//if (this.exists('html.js.safari.ovl-fading')){
+		//	this.echo('HTML Overlay detected='+count);	
+		//}
+		//if (!this.exists('html.js.safari.ovl-fading')){
+		// проверяем второй раз , что не появился оверлей
+		//if (!this.exists('div.ovl-frame.js-ovl-wrap')){
+		if (!this.exists('html.js.safari.ovl-fading')){
+			this.click('span.b-link.js-profile-header-vote');
+			++count;
+			this.echo('Zzzz...');
+			this.wait(1000,function(){
+				this.echo('Wakeup...');
+			});
+		}
+		else {
+		//this.waitForSelector('div.ovl-frame.js-ovl-wrap', 
+			this.echo('Overlay detected='+count);	
+			this.capture('Overlay10='+count+'.png');
+			//this.capture('Overlay11='+count+'.png');
+			//this.capture('Overlay12='+count+'.png');
+			//this.waitWhileVisible('div.ovl-frame.js-ovl-wrap', 
+			
+			// Пусть вас видят чаще
+			this.waitForSelector('span.p-link.js-ovl-close', 
+				function(){
+					this.echo('span.p-link.js-ovl-close SELECTOR='+count);	
+					if (this.exists(x('//span[text()="Нет, спасибо"]'))) {
+						this.echo('Нет, спасибо='+count);	
+						this.click('span.p-link.js-ovl-close');
 					}
-					this.echo('I Click yes '+count);
-					this.click('span.b-link.js-profile-header-vote');
-					novoice=false;
-					
-				});
-			},
-			3000
-		);
+				},
+				function() {
+					this.echo('No 3000='+count);
+				},
+				3000
+			);
+			
+			// <i class="icon icon--white js-ovl-close">  [Close icon]
+			this.waitForSelector('i.icon.icon--white.js-ovl-close', 
+				function () {
+					this.echo('i.icon.icon--white.js-ovl-close SELECTOR='+count);	
+					if (this.exists(x('//p[text()="У вас закончились голоса. Хотите проголосовать ещё 600 раз сегодня?"]'))) {
+						--count;
+						this.echo('У вас закончились голоса='+count);	
+						this.echo('ZZZzzzzz....10 min, --count='+count);	
+						novoice=true;
+						
+						this.wait(60000,
+							function(){	
+								this.click('i.icon.icon--white.js-ovl-close');
+							}
+						);
+					}
+					// <h1>Повысьте свои шансы!</h1>
+					else if (this.exists(x('//h1[text()="Повысьте свои шансы!"]'))) {
+						this.echo('Повысьте свои шансы! ='+count);	
+						this.click('i.icon.icon--white.js-ovl-close');
+					}
+					else if (this.exists(x('//h1[text()="Нравится Badoo?"]'))) {
+						this.capture('Nra='+count+'.png');
+						this.echo('Нравится Badoo! ='+count);	
+						this.click('i.icon.icon--white.js-ovl-close');
+					}
+					else {
+						this.capture('Hren='+count+'.png');
+						this.echo('У вас какая то хрень='+count);
+						this.click('i.icon.icon--white.js-ovl-close');
+					}
+				},
+				function() {
+					this.echo('No 3001='+count);
+				},
+				3001
+			);
+			
+			this.waitWhileVisible('div.ovl-frame.js-ovl-wrap',
+				function() {
+					this.echo('Overlay Disapeared='+count);
+					this.capture('Disapeared='+count+'.png');
+					this.wait(2000,function(){'Sleep after disapeared'});
+				},
+				function() {
+					this.echo('PROMBLEM: Overlay dows not disapeared!',+count);
+					this.capture('Error10='+count+'.png');
+					this.capture('Error11='+count+'.png');
+					this.capture('Error12='+count+'.png');
+				},
+				10000
+			);
+		}
+		
 	});
 	
 });
