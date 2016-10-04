@@ -112,12 +112,15 @@ casper.then(function() {
 		this.echo('-----------');
 		this.echo('count='+count);
 		//if (!this.exists('div.ovl-frame.js-ovl-wrap')){
+			
+		var fname = 'page='+count+'.html';
+		fs.write(fname, this.getHTML() , 'w');
 		if (!this.exists('html.js.safari.ovl-fading')){
 			//if (novoice==false) {
 			this.echo('I like '+count);
 			this.capture('badoo='+count+'.png');
-			var fname = 'page='+count+'.html';
-			fs.write(fname, this.getHTML() , 'w');
+			//var fname = 'page='+count+'.html';
+			//fs.write(fname, this.getHTML() , 'w');
 				//++count;
 			//}
 			//this.echo('I Click yes whitout capture'+count);
@@ -131,11 +134,68 @@ casper.then(function() {
 		// проверяем второй раз , что не появился оверлей
 		//if (!this.exists('div.ovl-frame.js-ovl-wrap')){
 		if (!this.exists('html.js.safari.ovl-fading')){
-			this.click('span.b-link.js-profile-header-vote');
-			++count;
-			this.echo('Zzzz...');
-			this.wait(1000,function(){
-				this.echo('Wakeup...');
+			
+			var rating="0";
+			this.echo("Enter profile...");
+			this.waitForSelector('span.b-link.js-profile-header-toggle-layout', function(){
+				this.echo('click profile');
+				this.click('span.b-link.js-profile-header-toggle-layout');
+				//this.waitForSelector('div.score-user',function(){
+				//	this.echo("rating");
+				//});
+				this.waitForSelector('div.score-user',
+					function(){
+						rating=this.fetchText('b.scale-value.no-dps').replace(",",".");
+						if (rating==""){
+							rating="10";
+						}
+					},
+					function(){
+						rating="10";
+						this.echo("profile_failed");
+						this.capture("profile_fail="+count+".png");
+					},
+					5000
+				);
+			});
+			this.then(function(){
+				this.echo("rating="+rating);
+				this.echo("profile_OK");
+				this.capture("profile="+count+"="+rating+".png");
+				//this.waitForSelector('span.b-link.js-profile-header-vote', 
+				this.waitForSelector('span[class="b-link js-profile-header-vote"]', 
+					function(){
+						//#app_c > div > div.profile__header.js-profile-header-container.js-core-events-container > header > div > div.profile-header__btn.js-profile-header-buttons > div.btn-game.btn-game--hot.js-profile-header-vote-yes.tooltip-wrap
+						//#app_c > div > div.profile__header.js-profile-header-container.js-core-events-container > header > div > div.profile-header__btn.js-profile-header-buttons > div.btn-game.btn-game--hot.js-profile-header-vote-yes.tooltip-wrap > span
+						//<span class="b-link js-profile-header-vote" data-choice="yes"></span>
+						//this.click('div.btn-game.btn-game--hot.js-profile-header-vote-yes.tooltip-wrap.b-link.js-profile-header-vote');
+						
+						
+						//this.click('span.b-link.js-profile-header-vote'); 
+						this.echo(rating);
+						//var x=rating.replace("0","r");
+						//this.echo(x);
+						var s = rating;//"the,batter,hit the ball with the bat";
+		
+						if (parseFloat(rating)>6.5){
+							this.echo("click yes")
+							this.click('span[class="b-link js-profile-header-vote"][data-choice="yes"]');
+						}
+						else {
+							this.echo("click no")
+							this.click('span[class="b-link js-profile-header-vote"][data-choice="no"]');
+						}
+						++count;
+						this.echo('10 sec Zzzz...');
+						this.wait(10000,function(){
+							this.echo('Wakeup...');
+						});
+					},
+					function(){
+						this.echo('No like button...');
+					},
+					5000
+				);
 			});
 		}
 		else {
@@ -171,7 +231,7 @@ casper.then(function() {
 						this.echo('ZZZzzzzz....10 min, --count='+count);	
 						novoice=true;
 						
-						this.wait(60000,
+						this.wait(600000,
 							function(){	
 								this.click('i.icon.icon--white.js-ovl-close');
 							}
@@ -208,12 +268,11 @@ casper.then(function() {
 				function() {
 					this.echo('PROMBLEM: Overlay dows not disapeared!',+count);
 					this.capture('Error10='+count+'.png');
-					this.capture('Error11='+count+'.png');
-					this.capture('Error12='+count+'.png');
 				},
 				10000
 			);
 		}
+		this.echo("End repeat");
 		
 	});
 	
