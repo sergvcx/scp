@@ -363,3 +363,5 @@ casper.run();
 			//});
 			//this.echo('end wait for love..');
 			
+//			<div class="ovl-frame js-ovl-wrap"><div class="js-ovl-content"> <div class="ovl-body"> <div class="ovl-content">  <h1>Нравится Badoo?</h1> <p> Поставьте нам хорошую оценку :)          </p>   <div class="stars">  <i class="stars__star js-star" data-star-value="1"></i>  <i class="stars__star js-star" data-star-value="2"></i>  <i class="stars__star js-star" data-star-value="3"></i>  <i class="stars__star js-star" data-star-value="4"></i>  <i class="stars__star js-star" data-star-value="5"></i>  <span class="blocker"></span> </div> </div> <div class="ovl-close"><i class="icon icon--grey js-ovl-close"><svg class="icon-svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cross"></use></svg></i></div> <div class="blocker blocker--light"></div> </div> </div><div class="loader loader--lg loader--black ovl-frame-loader"><span class="loader_"></span></div></div>
+			
