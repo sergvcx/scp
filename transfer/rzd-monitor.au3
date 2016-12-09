@@ -6,7 +6,7 @@
 #include "../myie.au3"
 
 $ini = "rzd.ini"
-$section = "path"
+$section = "path-msk-spb"
 $From    = IniRead ( $ini, $section, "from", "" )
 $To      = IniRead ( $ini, $section, "to", "" )
 $Date    = IniRead ( $ini, $section, "date", "" )
@@ -181,7 +181,11 @@ Func FromToWhen($from,$to,$date)
 	Sleep(1000)
 	InputTextByID("name0",$from)
 	Sleep(1000)
+	Send("{TAB}") 
+	Sleep(1000)
 	InputTextByID("name1",$to)
+	Sleep(1000)
+	Send("{TAB}") 
 	Sleep(1000)
 	InputClickByID("Submit");
 	Sleep(1000)
@@ -320,22 +324,22 @@ Func CheckRadioTrain($trainTag)
 EndFunc
 
 Func CheckTickets($trainNumber,$trainClass)
-	MSG("Info ","I am in CheckTickets", 2);
+	MSG("1 Info ","I am in CheckTickets", 2);
 	Local $oTags = GetTagCollectionByClass("table","trlist",0)
 	if (@error) then MSG("WTF",@error)
 		
 	For   $oTag In $oTags
-		MSG("Found","table" &"trlist", 2);
+		MSG("2 Found","table" &"trlist", 2);
 		Local $oTrains = GetTagCollectionByClassIn($oTag, "tr","trlist__trlist-row trslot ")
 		For   $oTrain In $oTrains
-			MSG("Found","tr trlist__trlist-row trslot ", 2); Нашли какой то поезд 
+			MSG("3 Found","tr trlist__trlist-row trslot ", 2); Нашли какой то поезд 
 			
 			; Проверяем номер поезда
 			$oTrainNumber=GetTagByClassIn($oTrain,"div","trlist__cell-pointdata__tr-num train-num-0")
 			if @error Then ContinueLoop
 			if not TagHasText($oTrainNumber,$trainNumber) Then ContinueLoop
 			
-			MSG("Found","поезд "& $trainNumber, 2); Нашли какой то поезд 
+			MSG("4 Found","поезд "& $trainNumber, 2); Нашли какой то поезд 
 			
 			; Проверяем наличие мест
 			$oTrainClass=GetTagByClassIn($oTrain,"table","trlist__table-price")
@@ -343,9 +347,9 @@ Func CheckTickets($trainNumber,$trainClass)
 			
 			if not TagHasText($oTrainNumber,$trainClass) Then ContinueLoop
 			
-			MSG("Found","место"& $trainClass, 2); Нашли какой то поезд 
+			MSG("5 Found","место"& $trainClass, 2); Нашли какой то поезд 
 			
-			MSG("Yes","Нашли поезд",10)
+			MSG("6 Yes","Нашли поезд",10)
 			; выбираем поезд
 			$trainRadio = GetTagByClassIn($oTrain,"input","j-train-radio",10)
 			if @error Then ContinueLoop
@@ -359,12 +363,14 @@ Func CheckTickets($trainNumber,$trainClass)
 			;			Sleep(1000)
 						;MSG("Sleep","Radio wagon",3);
 			
+			MSG("6.1 ","Жмем продолжить ",10)
 			; Жмем продолжить 
 			$buttonContinue = GetTagByClass("button","btn btn-color-red btn-icon btn-icon-red btn-icon-right disabledImit",10)
 			if @error Then ContinueLoop
 			_IEAction($buttonContinue,"click")
 			
-			;выбираем вагон
+			;
+			MSG("6.2 ","выбираем вагон",10)
 			$oWagons = GetTagCollectionByClass("tr","j-car-item trlist__trlist-row trlist__trlist-row-last-sub-item",10)
 			if @error Then ContinueLoop
 			
@@ -386,7 +392,7 @@ Func CheckTickets($trainNumber,$trainClass)
 				
 				; оплата
 				if WaitForPage("Сумма к оплате",10) Then 
-					MSG("Shit","Сумма к оплате")
+					MSG("7 Shit","Сумма к оплате")
 					Sleep(1000)
 					ClickTagByClass("input","fle marR15")
 					Sleep(1000)
