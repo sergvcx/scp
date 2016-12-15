@@ -5,7 +5,7 @@ casper.userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X)');
 
 
 //casper.start('http://ya.ru', function() {
-casper.start(metro, function() {
+casper.start(metro, function Open() {
 	phantom.outputEncoding="cp866";
     this.echo(this.getTitle());
 	this.capture('metro0.png');
@@ -13,7 +13,7 @@ casper.start(metro, function() {
 
 
 
-casper.then(function() {
+casper.then(function Enter() {
 	
 	
 	this.capture('metro0.png');
@@ -49,6 +49,12 @@ casper.then(function() {
 	
 },10000);
 
-
+//casper.start('http://ya.ru', function() {
+//casper.start('http://ya.ru', function test() {
+//	phantom.outputEncoding="cp866";
+ //   this.echo(this.getTitle());
+//	this.capture('metro5.png');
+//	fs.write('metro5.html', this.getHTML() , 'w');
+//});
 
 casper.run();

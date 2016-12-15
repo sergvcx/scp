@@ -2,6 +2,7 @@ phantom.injectJs('settings.js');
 //var casper = require('casper').create();
 
 
+
 var casper = require('casper').create({
   verbose: true,
   logLevel: "error",
@@ -12,6 +13,7 @@ var casper = require('casper').create({
 });
 
 casper.userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X)');
+casper.options.waitTimeout = 20000;
 //debug
 //info
 //warning
@@ -31,78 +33,80 @@ casper.options.viewportSize = {width: 1300, height: 950};
 casper.start('https://rzd.ru/timetable/logon/ru', function() {
 	phantom.outputEncoding="cp866";
     this.echo(this.getTitle());
-	this.capture('badoo-start.png');
-	
-	
+	this.capture('rzd-00-start.png');
 });
 
 casper.then(function Login() {
-	this.echo('Login...');
-	this.capture('rzd-01-login.png');
+	this.echo('[1] Waiting for login page...');
+	this.capture('rzd-01-login-waiting.png');
 	//<a href="https://badoo.com/signin/" class="link">Sign in</a>
 	
 	
-	this.waitForSelector('#selfcare_logon_form', function(){
-		this.echo('login form  is dettected');
-		//this.click('a.link[href="https://badoo.com/signin/"]');
-		//this.echo('signin is clicked');
-	});
-	
 	//#selfcare_logon_form
 	this.waitForSelector('#selfcare_logon_form', function(){
-		this.echo('form is dettected');
+		this.echo('login form  is detected');
 		this.fill('#selfcare_logon_form', {
 			'j_username': 'sergvcx',  
 			'j_password': 'sergvcx'},
 			true);
 		this.echo('form is filled');
 	});
-	
-	this.waitForSelector('#new_ticket_form > div:nth-child(1)', function(){
-		this.capture('rzd-01-accepted.png');
-		this.echo('login accepted');
-		this.echo('filling from to...');
-		this.sendKeys('#name0', 'МОСКВА');
-		this.sendKeys('#name1', 'САНКТ-ПЕТЕРБУРГ');
-		this.sendKeys('.detailsItem > input:nth-child(3)','09.12.2016');
-		this.click('#Submit');
-	});
-
-	this.wait(4000,function(){
-		this.capture('sleep.png');
-		this.echo('sleep 4 sec');
-	});
-	
-	//this.waitForSelector('#Part0', function(){
-	this.waitForSelector('div.j-trains-count:nth-child(4)', function(){
-		this.capture('rzd-02-variants.png');
-		this.echo('filled');
-		this.echo('variants apeared');
-		var result=this.fetchText('div.j-trains-count:nth-child(4)');
-		this.echo(result); // Показано 25 из 25 вариантов по прямому маршруту
-		
-		
-		
-		//this.querySelector('Поезд дальнего следования № 120В');
-		
-		
-	});
-	
-	this.waitForSelector('div.j-trains-count:nth-child(4)', function(){
-		this.capture('rzd-03-variants.png');
-		this.echo('queryy');
-		
-
-	
-	});
-	
-	
 });
 
-casper.then(function() {
-	this.echo('THEN');
+
+casper.then(function KudaGo() {
+	this.echo('[2] Waiting kuda-go form page ...');
+	this.capture('rzd-02-aenter.png');
+	this.waitForSelector('#new_ticket_form > div:nth-child(1)', function(){
+		this.echo('Kuda-go form page is detected!');
+		this.sendKeys('#name0', 'МОСКВА');
+		//this.sendKeys('#name1', 'САНКТ-ПЕТЕРБУРГ');
+		this.sendKeys('#name1', 'БЕРЕЩИНО');
+		//this.sendKeys('#date0.detailsItem > input:nth-child(3)','19.12.2016');
+		this.sendKeys('#date0','19.12.2016');
+		//*[@id="date0"]
+		this.capture('rzd-02-form-filled.png');
+		this.click('#Submit');
+		
+		this.echo('Kuda-go form filled ');
+	},function(){
+		this.echo('[ERROR-2] Waiting kuda-go form page ');
+		this.capture('rzd-02-error.png');
+		this.exit(1);
+	},10000);
+	this.capture('rzd-02-zexit.png');
+});
+	//this.wait(4000,function(){
+	//	this.capture('sleep.png');
+	//	this.echo('sleep 4 sec');
+	//});
+	
+casper.then(function a3() {
+	this.capture('rzd-03-enter.png');
+	this.echo('[3] Waiting for list of trains page ...');
+	//this.waitForSelector('#Part0', function(){
+	this.waitForSelector('div.j-trains-count:nth-child(4)', function(){
+		this.capture('rzd-03-list-of-trains.png');
+		this.echo('List of trains page detected');
+		var result=this.fetchText('div.j-trains-count:nth-child(4)');
+		this.echo(result); // Показано 25 из 25 вариантов по прямому маршруту
+		//this.querySelector('Поезд дальнего следования № 120В');
+	});
+	this.capture('rzd-03-zexit.png');
+});
+
+casper.then(function a31() {
+	this.echo('[31] started')
+    var verbs = casper.evaluate(function () {
+        return [].map.call(__utils__.findAll('div.trlist__cell-pointdata__tr-num.train-num-0'), function (e) { return e.innerHTML; });
+    });
+    console.log(JSON.stringify(verbs, null, 2));
+});
+
+
+casper.then(function a32() {
+	this.echo('[32] started');
 	//var nodes = this.evaluate(function(){
-		this.echo('eval'); 
 		//var arr = document.querySelectorAll('div');
 		//var arr = document.getElementById('container');
 		//this.echo('eval2'); 
@@ -113,11 +117,29 @@ casper.then(function() {
 		//	this.echo(arr.length);
 		//});
 		
+		// Usage:
+// optionally change the scope as final parameter too, like ECMA5
+//var divs = document.querySelectorAll('div');
+//[].forEach.call(divs, function(div) {
+  // do whatever
+  //	this.echo('*');
+  //div.style.color = "red";
+//});
+
+
+		
+
+//	var myNodeList = document.querySelectorAll('.trlist__cell-pointdata__tr-num.train-num-0');
+	//	forEach(myNodeList, function (index, value) {
+		//console.log(index, value); // passes index + value back!
+	//	this.echo('*')
+	//});
+
 		this.echo('===');
 		
-		var elements = this.getElementsInfo('.trlist__cell-pointdata__tr-num.train-num-0');
+		//var elements = this.getElementsInfo('.trlist__cell-pointdata__tr-num.train-num-0');
 		//var elements = this.getElementsInfo('.trlist__trlist-row.trslot');
-		
+		var elements = this.getElementsInfo('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(7) > td:nth-child(1)');
 		//elements.forEach(function(element){
 			//if (element.attributes["data-whatever"] === element.html) {
 			//	casper.echo("data attribute and content are exactly equal");
@@ -132,7 +154,10 @@ casper.then(function() {
 			this.echo('----------------------------');
 			this.echo(i);
 			//this.echo(train.children);
-			this.echo(train.innerText);
+			this.echo(train);
+			//require('utils').dump(train);
+			this.echo(train.text);
+			this.echo(train.visible);
 			
 			//var trainNo=train.text.replace("№ ","");
 			//var trainNo=train.childeNodesren[2].children[0].text.replace("№ ","");
@@ -148,6 +173,47 @@ casper.then(function() {
 		}
 	//});
 });
+
+casper.then(function a3() {
+	
+	this.echo('a3 started')
+	this.waitForSelector('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(3) > td:nth-child(1) > input.j-train-radio', function(){
+		this.capture('POEZD.png');
+		this.echo('POEZD');
+		this.click('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(3) > td:nth-child(1) > input.j-train-radio');
+	});
+	
+	
+});
+
+
+casper.then(function a4() {
+	this.echo('a4 started')
+	this.waitForSelector('#continueButton > span.btn-ie-mid', function(){
+		this.capture('POEZD-OPEN.png');
+		this.echo('POEZD-OPEN');
+		this.click('#continueButton > span.btn-ie-mid');
+	});
+	
+	
+});
+
+
+casper.then(function a5() {
+	
+	this.waitForSelector('#Main > div > div > table.pass_cars_table', function(){
+		this.capture('POEZD-VAGONS.png');
+		this.echo('POEZD-VAGONS');
+		this.click();
+	});
+	
+	
+});
+
+
+
+
+
 
 casper.then(function() {
 	this.waitForSelector('#continueButton', function(){
