@@ -30,7 +30,9 @@ var system = require('system');
 //casper.userAgent('Mozilla/6.0 (compatible; MSIE 6.0; Windows NT 5.1)');
 //casper.options.viewportSize = {width: 1600, height: 950};
 casper.options.viewportSize = {width: 1300, height: 950};
-casper.start('https://rzd.ru/timetable/logon/ru', function() {
+// <a class="orng" href="https://pass.rzd.ru/main-pass/secure/ru">Вход</a>
+//casper.start('https://rzd.ru/timetable/logon/ru', function() {
+	casper.start('https://pass.rzd.ru/main-pass/secure/ru', function() {
 	phantom.outputEncoding="cp866";
     this.echo(this.getTitle());
 	this.capture('rzd-00-start.png');
@@ -57,38 +59,97 @@ casper.then(function Login() {
 casper.then(function KudaGo() {
 	this.echo('[2] Waiting kuda-go form page ...');
 	this.capture('rzd-02-aenter.png');
-	this.waitForSelector('#new_ticket_form > div:nth-child(1)', function(){
+	//this.waitForSelector('#new_ticket_form > div:nth-child(1)', function(){
+	this.waitForSelector('#tab0_Output', function(){
 		this.echo('Kuda-go form page is detected!');
 		this.sendKeys('#name0', 'МОСКВА');
-		//this.sendKeys('#name1', 'САНКТ-ПЕТЕРБУРГ');
-		this.sendKeys('#name1', 'БЕРЕЩИНО');
-		//this.sendKeys('#date0.detailsItem > input:nth-child(3)','19.12.2016');
-		this.sendKeys('#date0','19.12.2016');
-		//*[@id="date0"]
-		this.capture('rzd-02-form-filled.png');
-		this.click('#Submit');
+		//this.page.sendEvent("keypress", casper.page.event.key.Tab);
+		this.sendKeys('#name1', 'САНКТ-ПЕТЕРБУРГ');
+		//this.sendKeys('input.jroute-field.box-form__input.gradient','БЕРЕЩИНО');
 		
-		this.echo('Kuda-go form filled ');
+		//this.page.sendEvent("keypress", casper.page.event.key.Tab);
+		this.wait(4000,function(){
+			var element = this.getElementInfo('#date0');
+			this.echo(this.getElementAttribute('#date0', 'class'));
+			//this.echo(element.text);
+			this.echo(element);
+			this.capture('sleep.png');
+			this.echo('sleep 4 sec in date');
+			this.click('#date0'); // Обязатьлено
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			this.page.sendEvent("keypress", this.page.event.key.Backspace);
+			
+			this.sendKeys('div.box-form__datetime__date-holder','18.12.2016'); // !! works
+			
+			this.page.sendEvent("keypress", this.page.event.key.Tab);
+		
+		});
+		//this.page.sendEvent("keypress", casper.page.event.key.Tab);
+		//this.sendKeys('#name1', 'БЕРЕЩИНО');
+		//this.sendKeys('#date0.detailsItem > input:nth-child(3)','19.12.2016');
+		//this.capture('rzd-02-form-filled.png');
+		//this.click('#Submit');
+		//this.echo('Kuda-go form filled ');
 	},function(){
 		this.echo('[ERROR-2] Waiting kuda-go form page ');
 		this.capture('rzd-02-error.png');
-		this.exit(1);
+		this.exit();
 	},10000);
 	this.capture('rzd-02-zexit.png');
 });
-	//this.wait(4000,function(){
-	//	this.capture('sleep.png');
-	//	this.echo('sleep 4 sec');
-	//});
+
+casper.then(function a3() {
+	this.wait(4000,function(){
+		this.capture('rzd-02-02.png');
+		this.echo('sleep 4 sec');
+	});
+});
+	
+casper.then(function KudaGoSubmit() {
+	this.echo('[2-1] Waiting kuda-go submit button...');
+	this.capture('rzd-02-01-aenter.png');
+	//this.waitForSelector('#new_ticket_form > div:nth-child(1)', function(){
+	this.waitForSelector('#BoxSubmit', function(){
+		this.echo('Kuda-go submit is detected!');
+		//*[@id="date0"]
+		this.capture('rzd-02-01-button.png');
+		this.click('#Submit');
+	},function(){
+		this.echo('[ERROR-2-1] Waiting kuda-go buttob  ');
+		this.capture('rzd-02-1-error.png');
+		this.exit();
+	},10000);
+	this.capture('rzd-02-1-zexit.png');
+});
+
+casper.then(function a3() {
+	this.wait(4000,function(){
+		this.capture('debug.png');
+		this.echo('sleep 4 sec');
+	});
+});
 	
 casper.then(function a3() {
 	this.capture('rzd-03-enter.png');
 	this.echo('[3] Waiting for list of trains page ...');
 	//this.waitForSelector('#Part0', function(){
-	this.waitForSelector('div.j-trains-count:nth-child(4)', function(){
+		
+		
+	//this.waitForSelector('div.j-trains-count:nth-child(4)', function(){
+	//this.waitForSelector('div.j-trains-count.trlist__train-count', function(){
+	this.waitForSelector('div.trlist__cell-pointdata__tr-num.train-num-0', function(){
+		
 		this.capture('rzd-03-list-of-trains.png');
 		this.echo('List of trains page detected');
-		var result=this.fetchText('div.j-trains-count:nth-child(4)');
+		var result=this.fetchText('div.j-trains-count.trlist__train-count');
 		this.echo(result); // Показано 25 из 25 вариантов по прямому маршруту
 		//this.querySelector('Поезд дальнего следования № 120В');
 	});

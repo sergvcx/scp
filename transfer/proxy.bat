@@ -1,0 +1,1 @@
+del *.png && casperjs --proxy=proxy:80 --proxy-auth=u:p rzd.js
