@@ -90,14 +90,9 @@ casper.then(function KudaGo() {
 			this.sendKeys('div.box-form__datetime__date-holder','18.12.2016'); // !! works
 			
 			this.page.sendEvent("keypress", this.page.event.key.Tab);
-		
+			this.echo('Kuda-go form filled ');
 		});
-		//this.page.sendEvent("keypress", casper.page.event.key.Tab);
-		//this.sendKeys('#name1', 'БЕРЕЩИНО');
-		//this.sendKeys('#date0.detailsItem > input:nth-child(3)','19.12.2016');
-		//this.capture('rzd-02-form-filled.png');
-		//this.click('#Submit');
-		//this.echo('Kuda-go form filled ');
+		
 	},function(){
 		this.echo('[ERROR-2] Waiting kuda-go form page ');
 		this.capture('rzd-02-error.png');
@@ -106,12 +101,12 @@ casper.then(function KudaGo() {
 	this.capture('rzd-02-zexit.png');
 });
 
-casper.then(function a3() {
-	this.wait(4000,function(){
-		this.capture('rzd-02-02.png');
-		this.echo('sleep 4 sec');
-	});
-});
+//casper.then(function a3() {
+//	this.wait(4000,function(){
+//		this.capture('rzd-02-02.png');
+//		this.echo('sleep 4 sec');
+//	});
+//});
 	
 casper.then(function KudaGoSubmit() {
 	this.echo('[2-1] Waiting kuda-go submit button...');
@@ -130,23 +125,17 @@ casper.then(function KudaGoSubmit() {
 	this.capture('rzd-02-1-zexit.png');
 });
 
-casper.then(function a3() {
-	this.wait(4000,function(){
-		this.capture('debug.png');
-		this.echo('sleep 4 sec');
-	});
-});
+//casper.then(function a3() {
+//	this.wait(4000,function(){
+//		this.capture('debug.png');
+//		this.echo('sleep 4 sec');
+//	});
+//});
 	
 casper.then(function a3() {
 	this.capture('rzd-03-enter.png');
 	this.echo('[3] Waiting for list of trains page ...');
-	//this.waitForSelector('#Part0', function(){
-		
-		
-	//this.waitForSelector('div.j-trains-count:nth-child(4)', function(){
-	//this.waitForSelector('div.j-trains-count.trlist__train-count', function(){
 	this.waitForSelector('div.trlist__cell-pointdata__tr-num.train-num-0', function(){
-		
 		this.capture('rzd-03-list-of-trains.png');
 		this.echo('List of trains page detected');
 		var result=this.fetchText('div.j-trains-count.trlist__train-count');
@@ -156,16 +145,39 @@ casper.then(function a3() {
 	this.capture('rzd-03-zexit.png');
 });
 
+var trains;
 casper.then(function a31() {
 	this.echo('[31] started')
     var verbs = casper.evaluate(function () {
         return [].map.call(__utils__.findAll('div.trlist__cell-pointdata__tr-num.train-num-0'), function (e) { return e.innerHTML; });
     });
     console.log(JSON.stringify(verbs, null, 2));
+	
+	trains = this.evaluate(function() {
+        //var elements = __utils__.findAll('tr.trlist__trlist-row.trslot');
+		var elements = __utils__.findAll('div.trlist__cell-pointdata__tr-num.train-num-0');
+		//this.echo(elements.length); //ERROR
+        return elements.map(function(e) {
+            //return e.getAttribute('href');
+			//return e.parentElement.firstElementChild.innerHTML ;
+			//return e.parentElement.children[1].innerHTML ;
+			return e.innerHTML ;
+			
+        });
+    });
+	this.echo('=====================');
+	
+	
 });
 
 
 casper.then(function a32() {
+	this.echo(trains.length);
+	//this.echo(trains[0].getAttribute('class'));
+	
+	console.log(JSON.stringify(trains[0], null, 2));
+	this.echo('======== end a31  =============');
+	
 	this.echo('[32] started');
 	//var nodes = this.evaluate(function(){
 		//var arr = document.querySelectorAll('div');
@@ -198,9 +210,9 @@ casper.then(function a32() {
 
 		this.echo('===');
 		
-		//var elements = this.getElementsInfo('.trlist__cell-pointdata__tr-num.train-num-0');
+		var elements = this.getElementsInfo('.trlist__cell-pointdata__tr-num.train-num-0');
 		//var elements = this.getElementsInfo('.trlist__trlist-row.trslot');
-		var elements = this.getElementsInfo('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(7) > td:nth-child(1)');
+		//var elements = this.getElementsInfo('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(7) > td:nth-child(1)');
 		//elements.forEach(function(element){
 			//if (element.attributes["data-whatever"] === element.html) {
 			//	casper.echo("data attribute and content are exactly equal");
@@ -215,10 +227,30 @@ casper.then(function a32() {
 			this.echo('----------------------------');
 			this.echo(i);
 			//this.echo(train.children);
-			this.echo(train);
+			//this.echo(train);
 			//require('utils').dump(train);
 			this.echo(train.text);
-			this.echo(train.visible);
+			var trainid = i+1;
+			//this.echo(train.getAttribute('class')); //ERROR
+			//this.echo(train.visible);
+			
+			
+			if (train.text.indexOf('120') !== -1){
+				
+				this.echo('clicked');
+				this.echo('clicked'+trainid);
+				//this.click('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(' + trainid +') > td:nth-child(1) > input.j-train-radio');
+				var selector = '#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(' + trainid +') > td:nth-child(1) > input.j-train-radio';
+				
+				
+				this.waitForSelector(selector, function(){
+					this.echo('found selector');
+					this.click(selector);
+				});
+				this.echo('clicked');
+				
+				
+			}
 			
 			//var trainNo=train.text.replace("№ ","");
 			//var trainNo=train.childeNodesren[2].children[0].text.replace("№ ","");
@@ -233,23 +265,25 @@ casper.then(function a32() {
 			//	console.log(err.textContent);
 		}
 	//});
+	this.exit();
 });
 
-casper.then(function a3() {
+//casper.then(function a3() {
+//	
+//	this.echo('a3 started')
+//	this.waitForSelector('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(3) > td:nth-child(1) > input.j-train-radio', function(){
+//		this.capture('POEZD.png');
+//		this.echo('POEZD');
+//		this.click('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(3) > td:nth-child(1) > input.j-train-radio');
+//	});
 	
-	this.echo('a3 started')
-	this.waitForSelector('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(3) > td:nth-child(1) > input.j-train-radio', function(){
-		this.capture('POEZD.png');
-		this.echo('POEZD');
-		this.click('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(3) > td:nth-child(1) > input.j-train-radio');
-	});
 	
-	
-});
+//});
 
 
 casper.then(function a4() {
 	this.echo('a4 started')
+	
 	this.waitForSelector('#continueButton > span.btn-ie-mid', function(){
 		this.capture('POEZD-OPEN.png');
 		this.echo('POEZD-OPEN');
