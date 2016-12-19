@@ -1,4 +1,4 @@
-phantom.injectJs('settings.js');
+phantom.injectJs('rzd-ini.js');
 //var casper = require('casper').create();
 
 
@@ -48,8 +48,8 @@ casper.then(function Login() {
 	this.waitForSelector('#selfcare_logon_form', function(){
 		this.echo('login form  is detected');
 		this.fill('#selfcare_logon_form', {
-			'j_username': 'sergvcx',  
-			'j_password': 'sergvcx'},
+			'j_username': username,  
+			'j_password': password},
 			true);
 		this.echo('form is filled');
 	});
@@ -62,9 +62,9 @@ casper.then(function KudaGo() {
 	//this.waitForSelector('#new_ticket_form > div:nth-child(1)', function(){
 	this.waitForSelector('#tab0_Output', function(){
 		this.echo('Kuda-go form page is detected!');
-		this.sendKeys('#name0', 'МОСКВА');
+		this.sendKeys('#name0', departure);
 		//this.page.sendEvent("keypress", casper.page.event.key.Tab);
-		this.sendKeys('#name1', 'САНКТ-ПЕТЕРБУРГ');
+		this.sendKeys('#name1', arrival);
 		//this.sendKeys('input.jroute-field.box-form__input.gradient','БЕРЕЩИНО');
 		
 		//this.page.sendEvent("keypress", casper.page.event.key.Tab);
@@ -87,7 +87,7 @@ casper.then(function KudaGo() {
 			this.page.sendEvent("keypress", this.page.event.key.Backspace);
 			this.page.sendEvent("keypress", this.page.event.key.Backspace);
 			
-			this.sendKeys('div.box-form__datetime__date-holder','18.12.2016'); // !! works
+			this.sendKeys('div.box-form__datetime__date-holder',date); // !! works
 			
 			this.page.sendEvent("keypress", this.page.event.key.Tab);
 			this.echo('Kuda-go form filled ');
@@ -235,13 +235,13 @@ casper.then(function a32() {
 			//this.echo(train.visible);
 			
 			
-			if (train.text.indexOf('120') !== -1){
+			if (train.text.indexOf(train_id) !== -1){
 				
 				this.echo('clicked');
 				this.echo('clicked'+trainid);
 				//this.click('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(' + trainid +') > td:nth-child(1) > input.j-train-radio');
 				var selector = '#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(' + trainid +') > td:nth-child(1) > input.j-train-radio';
-				
+				this.echo(selector);
 				
 				this.waitForSelector(selector, function(){
 					this.echo('found selector');
@@ -265,7 +265,7 @@ casper.then(function a32() {
 			//	console.log(err.textContent);
 		}
 	//});
-	this.exit();
+	//this.exit();
 });
 
 //casper.then(function a3() {
