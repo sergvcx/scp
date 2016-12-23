@@ -12,7 +12,9 @@ var casper = require('casper').create({
   //}
 });
 
-casper.userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X)');
+//casper.userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X)');
+casper.userAgent('Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36');
+
 casper.options.waitTimeout = 20000;
 //debug
 //info
@@ -32,12 +34,13 @@ var system = require('system');
 casper.options.viewportSize = {width: 1300, height: 950};
 // <a class="orng" href="https://pass.rzd.ru/main-pass/secure/ru">Вход</a>
 //casper.start('https://rzd.ru/timetable/logon/ru', function() {
-	casper.start('https://pass.rzd.ru/main-pass/secure/ru', function() {
+	//casper.start('https://pass.rzd.ru/main-pass/secure/ru', function() {
+	casper.start('http://pass.rzd.ru/main-pass/public/ru', function() {
 	phantom.outputEncoding="cp866";
     this.echo(this.getTitle());
 	this.capture('rzd-00-start.png');
 });
-
+/*
 casper.then(function Login() {
 	this.echo('[1] Waiting for login page...');
 	this.capture('rzd-01-login-waiting.png');
@@ -54,7 +57,7 @@ casper.then(function Login() {
 		this.echo('form is filled');
 	});
 });
-
+*/
 
 casper.then(function KudaGo() {
 	this.echo('[2] Waiting kuda-go form page ...');
@@ -248,7 +251,7 @@ casper.then(function a32() {
 					this.click(selector);
 				});
 				this.echo('clicked');
-				
+				break;
 				
 			}
 			
@@ -281,41 +284,93 @@ casper.then(function a32() {
 //});
 
 
-casper.then(function a4() {
+casper.then(function SubmitTrain() {
 	this.echo('a4 started')
+	this.echo('[4] Waiting for Submit Train')
+	
 	
 	this.waitForSelector('#continueButton > span.btn-ie-mid', function(){
-		this.capture('POEZD-OPEN.png');
-		this.echo('POEZD-OPEN');
+		this.capture('rzd-04-poezd-submit.png');
+		this.echo('Detected Clicked submit train. Clicked');
 		this.click('#continueButton > span.btn-ie-mid');
-	});
+	},function(){
+		this.echo('[ERROR-4] Timeout ');
+		this.capture('rzd-04-timeout.png');
+		fs.write('rzd-04-timeout.html',this.getHTML() , 'w');
+		this.exit();
+	},20000);
 	
 	
 });
 
 
-casper.then(function a5() {
+casper.then(function SelectWagon() {
 	
+	this.echo('[5] Waiting for Wagons..')
+	
+	//#Main > div > div > table.pass_cars_table
 	this.waitForSelector('#Main > div > div > table.pass_cars_table', function(){
-		this.capture('POEZD-VAGONS.png');
-		this.echo('POEZD-VAGONS');
-		this.click();
+		this.capture('rzd-05-wagons.png');
+		this.echo('Detected wagons!');
+
+		//#Main > div > div > table.pass_cars_table > tbody > tr:nth-child(2)		
+		//var eelements = this.getElementsInfo('tr');
+		//var eelements = this.getElementsInfo('tr.j-car-item.trlist__trlist-subhead');
+		var eelements = this.getElementsInfo('tr.j-car-item');
+		//var elements = this.getElementsInfo('.trlist__trlist-row.trslot');
+		//var elements = this.getElementsInfo('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(7) > td:nth-child(1)');
+		//elements.forEach(function(element){
+			//if (element.attributes["data-whatever"] === element.html) {
+			//	casper.echo("data attribute and content are exactly equal");
+			//} else {
+			//	casper.echo("data attribute and content are different");
+			//}
+			//this.echo(element.text);
+		//});
+		this.echo('number of wagons='+eelements.length);
+		for (var i = 0; i < eelements.length; i++) { 
+			var wagon = eelements[i]; 
+			this.echo('----------------------------');
+			this.echo('table raw = '+i);
+			this.echo(wagon.text);
+			var wagon_index = i+2;
+				
+			if (wagon.text.indexOf('Плацкартный') !== -1){
+				
+				this.echo('clicked Плацкартный '+wagon_index);
+				//this.click('#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(' + trainid +') > td:nth-child(1) > input.j-train-radio');
+				//#Main > div > div > table.pass_cars_table > tbody > tr:nth-child(3)
+				//#Main > div > div > table.pass_cars_table > tbody > tr:nth-child(5)
+				//#Main > div > div > table.pass_cars_table > tbody > tr:nth-child(9)
+				
+				//var selector = '#Main > div > div > table.pass_cars_table > tbody > tr:nth-child('+wagon_index+') > td.trlist__cell-pointdata.tac > input[type="radio"]';
+				var selector = '#Main > div > div > table.pass_cars_table > tbody > tr:nth-child('+wagon_index+') > td.trlist__cell-pointdata.tac';
+				//#Main > div > div > table.pass_cars_table > tbody > tr:nth-child(7) > td.trlist__cell-pointdata.tac > input[type="radio"]
+				this.echo('click '+selector);
+				this.click(selector);
+				this.echo('wagon clicked');
+				break;
+			}
+		}
 	});
-	
-	
+	this.echo('5-exit');
 });
-
-
-
 
 
 
 casper.then(function() {
+	this.wcho(' [6] wait For #continueButton...');
 	this.waitForSelector('#continueButton', function(){
-		this.capture('rzd-04-contine.png');
-		this.echo('continue');
+		this.capture('rzd-06-contine.png');
+		this.click('#continueButton > span.btn-ie-mid');
+		this.echo('Wagon continue detected! clicked.');
 	
-	});
+	},function(){
+		this.echo('[ERROR-6] Timeout ');
+		this.capture('rzd-06-timeout.png');
+		fs.write('rzd-06-timeout.html',this.getHTML() , 'w');
+		this.exit();
+	},20000);
 });
 
 function ClickPeopleNear() {
