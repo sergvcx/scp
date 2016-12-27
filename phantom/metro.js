@@ -39,22 +39,23 @@ casper.then(function Enter() {
 },10000);
 
 casper.then(function(){
-		this.echo('Wellcome');
-		fs.write('metro2.html', this.getHTML() , 'w');
-		this.capture('metro2.png');
-		this.waitForSelector('span.icon.icon-troika', function(){
-			this.echo('Fuck of metro adverstment - Ready !');
-			//this.wait(3000,function(){
-			this.capture('metro3.png');
-			fs.write('metro3.html', this.getHTML() , 'w');
-		});
+	this.echo('Wellcome');
+	this.echo('Waitinf for span.icon.icon-troika...');
+	fs.write('metro2.html', this.getHTML() , 'w');
+	this.capture('metro2.png');
+	this.waitForSelector('span.icon.icon-troika', function(){
+		this.echo('Fuck of metro adverstment - Ready !');
+		//this.wait(3000,function(){
+		this.capture('metro3.png');
+		fs.write('metro3.html', this.getHTML() , 'w');
+	},
+	function(){
+		this.echo('Not found  !');
+		this.capture('metro-03-not found.png');
+		fs.write('metro-03.html', this.getHTML() , 'w');
+	},10000
+	);
 });	
-//casper.start('http://ya.ru', function() {
-//casper.start('http://ya.ru', function test() {
-//	phantom.outputEncoding="cp866";
- //   this.echo(this.getTitle());
-//	this.capture('metro5.png');
-//	fs.write('metro5.html', this.getHTML() , 'w');
-//});
+
 
 casper.run();
