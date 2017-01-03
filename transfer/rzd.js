@@ -49,7 +49,7 @@ casper.then(function Login() {
 		this.echo('login form  is detected');
 		this.fill('#selfcare_logon_form', {
 			'j_username': 'sergvcx',  
-			'j_password': 'sergvcx'},
+			'j_password': 'sergvcxr'},
 			true);
 		this.echo('form is filled');
 	});
