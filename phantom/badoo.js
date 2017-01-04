@@ -1,6 +1,32 @@
-phantom.injectJs('settings.js');
+//phantom.injectJs('settings.js');
 var casper = require('casper').create();
-var fs = require('fs');
+var json = require('badoo.json');
+//require('utils').dump(json);
+var username=json['username'];
+var password=json['password'];
+var minratio=json['minratio'];
+var lastindx=json['lastindx'];
+
+var fs     = require('fs');
+
+function saveJSON(){
+	casper.echo('save to JSON...');
+	var jsonStr = "{\n";
+	jsonStr+= '"username":"'+username+"\",\n";
+	jsonStr+= '"password":"'+password+"\",\n";
+	jsonStr+= '"minratio":'+minratio+",\n";
+	jsonStr+= '"lastindx":'+lastindx+" \n";
+	jsonStr+= '}';
+	fs.write('badoo.json', jsonStr, 'w');
+	
+	//var jsonArray;
+	//jsonArray.push($("#firstname").val();
+	//jsonArray.push($("#lastname").val();
+	//var myJsonString = JSON.stringify(json);
+}
+
+
+	
 casper.userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X)');
 //casper.userAgent('Mozilla/6.0 (compatible; MSIE 6.0; Windows NT 5.1)');
 casper.start('http://badoo.com', function() {
@@ -9,14 +35,23 @@ casper.start('http://badoo.com', function() {
 	this.capture('badoo-start.png');
 });
 
+
+
 casper.then(function() {
 	this.capture('badoo-00.png');
 	this.click('a.btn.btn--sm.btn--white');
 	this.capture('badoo-01.png');
+	
+	//lastindx+=1;
+	//saveJSON();
+
 });
 
+
+
+
 casper.then(function() {
-	
+	this.echo('[01] Waiting for login...');
 	this.capture('badoo-10.png');
 	//*[@id="anketa"]
 	//test.assertExists('form[id="anketa"]', "main form is found");
@@ -45,7 +80,7 @@ casper.then(function() {
 	
 	this.waitForSelector('form', function(){
 		this.fill('form.no_autoloader.form.js-signin', {
-			'email': email, 
+			'email': username, 
 			'password': password},
 			true);
 	});
@@ -56,7 +91,7 @@ casper.then(function() {
 	
 	//#dlg_login > ul.reset.line.lab_w43 > li:nth-child(4) > div > button
 	
-	this.echo('filled');
+	
 });
 
 casper.then(function() {
@@ -86,7 +121,7 @@ casper.then(function() {
 });	
 
 casper.then(function() {
-	var numTimes = 5000, count = 1;
+	var numTimes = 5000, count = lastindx+1;
 	var x = require('casper').selectXPath;
 	this.echo('..');
 	//this.waitTimeOut(2000);
@@ -113,12 +148,12 @@ casper.then(function() {
 		this.echo('count='+count);
 		//if (!this.exists('div.ovl-frame.js-ovl-wrap')){
 			
-		var fname = 'page='+count+'.html';
-		fs.write(fname, this.getHTML() , 'w');
-		if (!this.exists('html.js.safari.ovl-fading')){
+		//var fname = 'page='+count+'.html';
+		//fs.write(fname, this.getHTML() , 'w');
+		//if (!this.exists('html.js.safari.ovl-fading')){
 			//if (novoice==false) {
-			this.echo('I like '+count);
-			this.capture('badoo='+count+'.png');
+			//this.echo('I like '+count);
+			//this.capture('badoo='+count+'.png');
 			//var fname = 'page='+count+'.html';
 			//fs.write(fname, this.getHTML() , 'w');
 				//++count;
@@ -126,7 +161,7 @@ casper.then(function() {
 			//this.echo('I Click yes whitout capture'+count);
 			
 			//novoice=false;
-		}//}
+		//}//}
 		//if (this.exists('html.js.safari.ovl-fading')){
 		//	this.echo('HTML Overlay detected='+count);	
 		//}
@@ -140,28 +175,35 @@ casper.then(function() {
 			this.waitForSelector('span.b-link.js-profile-header-toggle-layout', function(){
 				this.echo('click profile');
 				this.click('span.b-link.js-profile-header-toggle-layout');
+				this.echo('Whaiting for profile...');
 				//this.waitForSelector('div.score-user',function(){
 				//	this.echo("rating");
 				//});
-				this.waitForSelector('div.score-user',
+				//this.waitForSelector('div.score-user',
+				this.waitForSelector('b.scale-value.no-dps',
 					function(){
+						//this.capture('profile='+count+'-profileYes.png');
 						rating=this.fetchText('b.scale-value.no-dps').replace(",",".");
+						this.echo('Rating= '+rating);
 						if (rating==""){
 							rating="10";
 						}
 					},
 					function(){
+						//this.capture('badoo='+count+'-profileNo.png');
 						rating="10";
-						this.echo("profile_failed");
-						this.capture("profile_fail="+count+".png");
+						this.echo("No rating");
+						//this.capture("profile_fail="+count+".png");
 					},
 					5000
 				);
 			});
 			this.then(function(){
 				this.echo("rating="+rating);
-				this.echo("profile_OK");
-				this.capture("profile="+count+"="+rating+".png");
+				//this.echo("profile_OK");
+				lastindx=count;
+				this.capture("./badoo-game/profile=("+rating+")=["+count+"].png");
+				saveJSON();
 				//this.waitForSelector('span.b-link.js-profile-header-vote', 
 				this.waitForSelector('span[class="b-link js-profile-header-vote"]', 
 					function(){
@@ -177,7 +219,7 @@ casper.then(function() {
 						//this.echo(x);
 						var s = rating;//"the,batter,hit the ball with the bat";
 		
-						if (parseFloat(rating)>6.5){
+						if (parseFloat(rating)>minratio){
 							this.echo("click yes")
 							this.click('span[class="b-link js-profile-header-vote"][data-choice="yes"]');
 						}
@@ -224,7 +266,7 @@ casper.then(function() {
 			// <i class="icon icon--white js-ovl-close">  [Close icon]
 			this.waitForSelector('i.icon.icon--white.js-ovl-close', 
 				function () {
-					this.echo('i.icon.icon--white.js-ovl-close SELECTOR='+count);	
+					this.echo('[SELECTOR] i.icon.icon--white.js-ovl-close ='+count);	
 					if (this.exists(x('//p[text()="У вас закончились голоса. Хотите проголосовать ещё 600 раз сегодня?"]'))) {
 						--count;
 						this.echo('У вас закончились голоса='+count);	
@@ -259,6 +301,46 @@ casper.then(function() {
 				3001
 			);
 			
+			this.waitForSelector('div.ovl-frame.js-ovl-wrap',
+				function() {
+					this.echo('[SELECTOR] div.ovl-frame.js-ovl-wrap ='+count);	
+					if (this.exists(x('//p[text()="Этот аккаунт используется на другом устройстве."]'))) {
+						--count;
+						this.echo('Этот аккаунт используется на другом устройстве.='+count);	
+						this.echo('ZZZzzzzz....10 min, --count='+count);	
+						novoice=true;
+						
+						this.wait(600000,
+							function(){	
+								this.echo('Жмем продолжить...');	
+								this.click('span.b-link.js-continue'); // Жмем продолжить
+							}
+						);
+					}
+					else if (this.exists(x('//p[text()="Время сеанса истекло. Пожалуйста, выполните вход ещё раз."]'))) {
+						--count;
+						this.echo('Время сеанса истекло. Пожалуйста, выполните вход ещё раз.'+count);	
+						this.echo('ZZZzzzzz....1 min, --count='+count);	
+						novoice=true;
+						
+						this.wait(60000,
+							function(){	
+								this.echo('Жмем продолжить...');	
+								this.click('span.b-link.js-session-expire'); // Жмем продолжить
+							}
+						);
+					}
+					else {
+						this.capture('Hren='+count+'.png');
+						this.echo('У вас какая то хрень 2='+count);
+					}
+				},
+				function() {
+					
+				},
+				3002
+			);
+			
 			this.waitWhileVisible('div.ovl-frame.js-ovl-wrap',
 				function() {
 					this.echo('Overlay Disapeared='+count);
@@ -266,7 +348,7 @@ casper.then(function() {
 					this.wait(2000,function(){'Sleep after disapeared'});
 				},
 				function() {
-					this.echo('PROMBLEM: Overlay dows not disapeared!',+count);
+					this.echo('[PROBLEM]: Overlay dows not disapeared!',+count);
 					this.capture('Error10='+count+'.png');
 				},
 				10000
