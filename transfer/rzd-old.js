@@ -1,4 +1,3 @@
-phantom.injectJs('rzd-ini.js');
 var utils  = require("utils");
 var fs     = require('fs');
 var system = require('system');
@@ -227,8 +226,9 @@ casper.then(function pageTrainList() {
 			//this.echo(train.visible);
 			
 			
-			if (train.text.indexOf(train_id) !== -1){ 	// Если это искомый поезд
+			if (train.text.indexOf(ticket['train']) !== -1){ 	// Если это искомый поезд
 				var selector = '#Part0 > div:nth-child(6) > table > tbody > tr:nth-child(' + train_row +') > td:nth-child(1) > input.j-train-radio';
+				this.click(selector);
 			}
 		}
 	},function(){
@@ -236,21 +236,17 @@ casper.then(function pageTrainList() {
 		this.capture('rzd-03-timeout.png');
 		fs.write('rzd-03-timeout.html',this.getHTML() , 'w');
 		this.exit();
-		//this.goto('RESTART');
 	},20000);
-	this.capture('rzd-03-zexit.png');
-	
 
 });
 
 
 
 casper.then(function submitTrain() {
-	this.echo('a4 started')
-	this.echo('[4] Waiting for Submit Train')
+	this.echo('[4] Waiting for Submit Train');
 	
-	
-	this.waitForSelector('#continueButton > span.btn-ie-mid', function(){
+	//this.waitForSelector('#continueButton > span.btn-ie-mid', function(){
+	this.waitUntilVisible('#continueButton > span.btn-ie-mid', function(){
 		this.capture('rzd-04-poezd-submit.png');
 		this.echo('[Click continue...]');
 		this.click('#continueButton > span.btn-ie-mid');
@@ -271,20 +267,20 @@ casper.then(function scanWagons() {
 	this.waitForSelector('#Main > div > div > table.pass_cars_table', function(){
 		this.capture('rzd-05-wagons.png');
 		this.echo('Detected wagons!');
-		var eelements = this.getElementsInfo('tr.j-car-item');
-		for (var i = 0; i < eelements.length; i++) { 
-			var wagon = eelements[i]; 
+		var elements = this.getElementsInfo('tr.j-car-item');
+		for (var i = 0; i < elements.length; i++) { 
+			var element = elements[i]; 
 			//this.echo('----------------------------');
 			//this.echo('table raw = '+i);
 			//this.echo(wagon.text);
-			var wagon_row = i+2;
-				
-			for(var t=0; t<wagon_type.length; t++){
-				if (wagon.text.indexOf(wagon_type[t]) !== -1){
+			var wagon_radio_row = i+2;
+			//this.echo(ticket['class'].length);
+			for(var t=0; t<ticket['class'].length; t++){
+				if (element.text.indexOf(ticket['class'][t]) !== -1){
 					
 					//this.echo('clicked Плацкартный '+wagon_index);
-					this.echo('found '+wagon_type[t] + ' at '+ wagon_row);
-					wagon_row_found[t]=wagon_row;
+					this.echo('found '+ticket['class'][t] + ' at '+ wagon_radio_row);
+					wagon_row_found[t]=wagon_radio_row;
 				}	
 			}
 		}
@@ -296,7 +292,7 @@ casper.then(function selectWagon() {
 	this.capture('rzd-06.png');
 	this.echo('[6] select wagon..');
 	var found_wagons=0;
-	for(var t=0; t<wagon_type.length; t++){
+	for(var t=0; t<ticket['class'].length; t++){
 		found_wagons+= wagon_row_found[t];
 	}
 	if (found_wagons==0){
@@ -307,7 +303,7 @@ casper.then(function selectWagon() {
 		this.echo('************* YOHOOO! CATCH TICKETS!!! ********************');
 	}
 			
-	for(var t=0; t<wagon_type.length; t++){
+	for(var t=0; t<ticket['class'].length; t++){
 		if (wagon_row_found[t]>0){
 			var selector = 	'#Main > div > div > table.pass_cars_table > tbody > tr:nth-child('+wagon_row_found[t]+') > td.trlist__cell-pointdata.tac > input[type="radio"]';
 			if(casper.exists(selector)){
