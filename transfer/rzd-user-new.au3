@@ -1,4 +1,4 @@
-$browser = "Расписание"
+$browser = "Пассажирам"
 if WinActivate ($browser)= 0 Then
 	MsgBox($MB_SYSTEMMODAL, "", "Бразуер с РЖД не найден " )
 	exit
@@ -91,31 +91,19 @@ if $lang = $RU Then
 Endif	
 
 
-
 Sleep(200)
 Send($surname)
 Send("{TAB}") 
+
 
 Sleep(200)
 Send($name)
 Send("{TAB}") 
 
+
 Sleep(200)
 Send($middlename)
 Send("{TAB}") 
-
-Sleep(100)
-Send($birthday) 
-Sleep(100)
-Send("{ENTER}")
-Send("{TAB}")
-Send("{TAB}")
-Send("{TAB}")
-
-
-Sleep(100)
-Send($passport)
-Send("{TAB}")
 
 
 If $sex = "m" Then
@@ -124,15 +112,40 @@ If $sex = "m" Then
 Else
 	Send("{DOWN}")
 Endif
+Send("{TAB}") 
 
+Sleep(100)
+Send($birthday) 
+Sleep(100)
+Send("{TAB}")
+Sleep(100)
+Send("{TAB}")
+Sleep(1000)
+Send("{TAB}")
+
+
+Sleep(100)
+Send($passport)
 Send("{TAB}")
 Send("{TAB}")
-Send("{TAB}")
+
 Send("{SPACE}")
-
-
-
-
+Sleep(100)
+Send("{TAB}")
+Sleep(100)
+Send("{SPACE}")
+Sleep(100)
+Send("{TAB}")
+Sleep(100)
+Send("{SPACE}")
+Sleep(100)
+Send("{TAB}")
+Sleep(100)
+Send("{SPACE}")
+Sleep(100)
+Send("{TAB}")
+Sleep(100)
+Send($bonus)
 Sleep(1000)
 ;WinGetActiveStats, getTitle, width, height, x, y
 ;MouseGetPos, cur_x, cur_y 
